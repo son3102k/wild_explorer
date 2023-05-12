@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wild_explorer/extensions/buildcontext/loc.dart';
 
 import '../app_theme.dart';
 import '../services/auth/bloc/auth_bloc.dart';
@@ -35,7 +36,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
       DrawerList(
         index: DrawerIndex.HOME,
         labelName: 'Home',
-        icon: Icon(Icons.home),
+        icon: const Icon(Icons.home),
       ),
       DrawerList(
         index: DrawerIndex.Help,
@@ -46,22 +47,22 @@ class _HomeDrawerState extends State<HomeDrawer> {
       DrawerList(
         index: DrawerIndex.FeedBack,
         labelName: 'FeedBack',
-        icon: Icon(Icons.help),
+        icon: const Icon(Icons.help),
       ),
       DrawerList(
         index: DrawerIndex.Invite,
         labelName: 'Invite Friend',
-        icon: Icon(Icons.group),
+        icon: const Icon(Icons.group),
       ),
       DrawerList(
         index: DrawerIndex.Share,
         labelName: 'Rate the app',
-        icon: Icon(Icons.share),
+        icon: const Icon(Icons.share),
       ),
       DrawerList(
         index: DrawerIndex.About,
         labelName: 'About Us',
-        icon: Icon(Icons.info),
+        icon: const Icon(Icons.info),
       ),
     ];
   }
@@ -161,8 +162,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
             children: <Widget>[
               ListTile(
                 title: Text(
-                  'Sign Out',
-                  style: TextStyle(
+                  context.loc.logout_button,
+                  style: const TextStyle(
                     fontFamily: AppTheme.fontName,
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -170,7 +171,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   ),
                   textAlign: TextAlign.left,
                 ),
-                trailing: Icon(
+                trailing: const Icon(
                   Icons.power_settings_new,
                   color: Colors.red,
                 ),
@@ -206,7 +207,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
               padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
               child: Row(
                 children: <Widget>[
-                  Container(
+                  const SizedBox(
                     width: 6.0,
                     height: 46.0,
                     // decoration: BoxDecoration(
@@ -225,7 +226,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     padding: EdgeInsets.all(4.0),
                   ),
                   listData.isAssetsImage
-                      ? Container(
+                      ? SizedBox(
                           width: 24,
                           height: 24,
                           child: Image.asset(listData.imageName,
@@ -274,7 +275,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             height: 46,
                             decoration: BoxDecoration(
                               color: Colors.blue.withOpacity(0.2),
-                              borderRadius: new BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(0),
                                 topRight: Radius.circular(28),
                                 bottomLeft: Radius.circular(0),
