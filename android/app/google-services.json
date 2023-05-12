@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "61994842346",
+    "project_id": "wild-explorer-flutter-app",
+    "storage_bucket": "wild-explorer-flutter-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:61994842346:android:390963bbc11994abbbff93",
+        "android_client_info": {
+          "package_name": "vn.wx.wild_explorer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "61994842346-ctfdbipehpg6n9jr82po2lno9tod9f2m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt5qmKHmsCw4e8w0ckZfnnR7Y8P3IfQdc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "61994842346-ctfdbipehpg6n9jr82po2lno9tod9f2m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
