@@ -106,6 +106,12 @@ flutter:
               - asset: assets/fonts/Roboto-Regular.ttf
               - asset: assets/fonts/Roboto-Medium.ttf
                 weight: 400
+        - family: rubik
+          fonts:
+              - asset: assets/fonts/Rubik-Regular.ttf
+              - asset: assets/fonts/Rubik-Medium.ttf
+              - asset: assets/fonts/Rubik-Bold.ttf
+                weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
