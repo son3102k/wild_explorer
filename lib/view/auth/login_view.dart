@@ -50,57 +50,127 @@ class _LoginViewState extends State<LoginView> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(context.loc.login),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/background.png'),
+                fit: BoxFit.fill),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
+                const SizedBox(height: 40.0),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Hello',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontFamily: 'Rubik',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20.0),
+                const Text('Sign in to your account',
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontFamily: 'Rubik',
+                        fontWeight: FontWeight.bold)),
+                const SizedBox(height: 40.0),
                 TextField(
                   controller: _email,
                   enableSuggestions: false,
                   autocorrect: false,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      prefixIcon: const Icon(Icons.email),
                       hintText: context.loc.email_text_field_placeholder),
                 ),
+                const SizedBox(height: 30.0),
                 TextField(
                   controller: _password,
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
                   decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      prefixIcon: const Icon(Icons.lock),
+                      suffixIcon: const Icon(Icons.remove_red_eye),
                       hintText: context.loc.password_text_field_placeholder),
                 ),
-                TextButton(
-                  onPressed: () async {
-                    final email = _email.text;
-                    final password = _password.text;
-                    context.read<AuthBloc>().add(AuthEventLogin(
-                          email,
-                          password,
-                        ));
-                  },
-                  child: Text(context.loc.login),
+                const SizedBox(height: 10.0),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(
+                            const AuthEventForgotPassword(),
+                          );
+                    },
+                    child: Text(
+                      context.loc.login_view_forgot_password,
+                      style: const TextStyle(
+                        fontFamily: 'Rubik',
+                        color: Colors.black,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(
-                          const AuthEventShouldRegister(),
-                        );
-                  },
-                  child: Text(context.loc.login_view_not_registered_yet),
+                const SizedBox(height: 10.0),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    width: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40.0),
+                      color: const Color.fromRGBO(199, 57, 249, 1),
+                    ),
+                    child: TextButton.icon(
+                      icon: const Icon(
+                        Icons.arrow_forward,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      label: const Text(''),
+                      onPressed: () async {
+                        final email = _email.text;
+                        final password = _password.text;
+                        context.read<AuthBloc>().add(AuthEventLogin(
+                              email,
+                              password,
+                            ));
+                      },
+                    ),
+                  ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(
-                          const AuthEventForgotPassword(),
-                        );
-                  },
-                  child: Text(context.loc.login_view_forgot_password),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: TextButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(
+                              const AuthEventShouldRegister(),
+                            );
+                      },
+                      child: Text(
+                        context.loc.login_view_not_registered_yet,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
                 ),
+                const SizedBox(height: 20.0),
               ],
             ),
           ),
