@@ -18,7 +18,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
-
+  bool _obscureText = true;
   @override
   void initState() {
     _email = TextEditingController();
@@ -88,16 +88,17 @@ class _LoginViewState extends State<LoginView> {
                   autocorrect: false,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      prefixIcon: const Icon(Icons.email),
-                      hintText: context.loc.email_text_field_placeholder),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    prefixIcon: const Icon(Icons.email),
+                    hintText: context.loc.email_text_field_placeholder,
+                  ),
                 ),
                 const SizedBox(height: 30.0),
                 TextField(
                   controller: _password,
-                  obscureText: true,
+                  obscureText: _obscureText,
                   enableSuggestions: false,
                   autocorrect: false,
                   decoration: InputDecoration(
@@ -105,7 +106,18 @@ class _LoginViewState extends State<LoginView> {
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                       prefixIcon: const Icon(Icons.lock),
-                      suffixIcon: const Icon(Icons.remove_red_eye),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                        icon: Icon(
+                          _obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
                       hintText: context.loc.password_text_field_placeholder),
                 ),
                 const SizedBox(height: 10.0),
@@ -165,7 +177,12 @@ class _LoginViewState extends State<LoginView> {
                       },
                       child: Text(
                         context.loc.login_view_not_registered_yet,
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Rubik',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
