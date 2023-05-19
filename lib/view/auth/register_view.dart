@@ -188,12 +188,15 @@ class _RegisterViewState extends State<RegisterView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
+                          iconSize: 50,
                           icon: SvgPicture.asset(
                             'assets/icons/icons8-facebook.svg',
+                            fit: BoxFit.scaleDown,
                           ),
                           onPressed: () {},
                         ),
                         IconButton(
+                          iconSize: 46,
                           icon: SvgPicture.asset(
                             'assets/icons/icons8-google.svg',
                           ),
