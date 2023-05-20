@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:wild_explorer/discovery/discovery_home_screen.dart';
 
 class HomeList {
   HomeList({
@@ -20,7 +21,7 @@ class HomeList {
       imagePath: 'assets/fitness_app/fitness_app.png',
     ),
     HomeList(
-      imagePath: 'assets/design_course/design_course.png',
-    ),
+        imagePath: 'assets/design_course/design_course.png',
+        navigateScreen: const DiscoveryHomeScreen()),
   ];
 }
