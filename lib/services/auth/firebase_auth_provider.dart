@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, FirebaseAuthException;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../firebase_options.dart';
 import 'auth_exceptions.dart';
@@ -15,6 +14,11 @@ class FirebaseAuthProvider implements AuthProvider {
   Future<void> initialize() async {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
+    final idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (idToken != null) {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('idToken', idToken);
+    }
   }
 
   @override
@@ -61,8 +65,10 @@ class FirebaseAuthProvider implements AuthProvider {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       final user = currentUser;
-      log(await FirebaseAuth.instance.currentUser!.getIdToken());
       if (user != null) {
+        final idToken = await FirebaseAuth.instance.currentUser!.getIdToken();
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('idToken', idToken);
         return user;
       } else {
         throw UserNotLoggedInAuthException();
@@ -85,6 +91,8 @@ class FirebaseAuthProvider implements AuthProvider {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       await FirebaseAuth.instance.signOut();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove('counter');
     } else {
       throw UserNotLoggedInAuthException();
     }

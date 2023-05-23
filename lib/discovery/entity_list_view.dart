@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/discovery/utils/HexColor.dart';
+import 'package:wild_explorer/services/api/api_service.dart';
 
 import 'discovery_app_theme.dart';
 import 'models/entity.dart';
@@ -20,6 +21,7 @@ class _EntityListViewState extends State<EntityListView>
   }
 
   Future<bool> getData() async {
+    await (ApiService().getFiveEntity());
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
   }
