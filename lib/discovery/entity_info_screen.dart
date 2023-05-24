@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:wild_explorer/discovery/models/entity.dart';
 import 'discovery_app_theme.dart';
 
 class EntityInfoScreen extends StatefulWidget {
-  const EntityInfoScreen({super.key});
-
+  const EntityInfoScreen({super.key, required this.entity});
+  final Entity entity;
   @override
   _EntityInfoScreenState createState() => _EntityInfoScreenState();
 }
@@ -45,6 +46,7 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
 
   @override
   Widget build(BuildContext context) {
+    final Entity entity = widget.entity;
     final double tempHeight = MediaQuery.of(context).size.height -
         (MediaQuery.of(context).size.width / 1.2) +
         24.0;
@@ -93,13 +95,13 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Padding(
-                            padding:
-                                EdgeInsets.only(top: 32.0, left: 18, right: 16),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 32.0, left: 18, right: 16),
                             child: Text(
-                              'Web Design\nCourse',
+                              entity.name,
                               textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 22,
                                 letterSpacing: 0.27,
@@ -125,19 +127,19 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                                   ),
                                 ),
                                 Container(
-                                  child: const Row(
+                                  child: Row(
                                     children: <Widget>[
                                       Text(
-                                        '4.3',
+                                        entity.rating.toString(),
                                         textAlign: TextAlign.left,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w200,
                                           fontSize: 22,
                                           letterSpacing: 0.27,
                                           color: DiscoveryAppTheme.grey,
                                         ),
                                       ),
-                                      Icon(
+                                      const Icon(
                                         Icons.star,
                                         color: DiscoveryAppTheme.nearlyBlue,
                                         size: 24,
@@ -166,19 +168,19 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                             child: AnimatedOpacity(
                               duration: const Duration(milliseconds: 500),
                               opacity: opacity2,
-                              child: const Padding(
-                                padding: EdgeInsets.only(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
                                     left: 16, right: 16, top: 8, bottom: 8),
                                 child: Text(
-                                  'Lorem ipsum is simply dummy text of printing & typesetting industry, Lorem ipsum is simply dummy text of printing & typesetting industry.',
+                                  entity.description,
                                   textAlign: TextAlign.justify,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.w200,
                                     fontSize: 14,
                                     letterSpacing: 0.27,
                                     color: DiscoveryAppTheme.grey,
                                   ),
-                                  maxLines: 3,
+                                  maxLines: 10,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),

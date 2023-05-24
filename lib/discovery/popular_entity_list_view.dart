@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:wild_explorer/discovery/discovery_home_screen.dart';
 import 'package:wild_explorer/discovery/models/entity.dart';
 import 'package:wild_explorer/discovery/utils/HexColor.dart';
+import 'package:wild_explorer/services/api/api_service.dart';
 
 import 'discovery_app_theme.dart';
 
 class PopularEntityListView extends StatefulWidget {
-  const PopularEntityListView({Key? key, this.callBack}) : super(key: key);
+  final CategoryType categoryType;
+  const PopularEntityListView(
+      {Key? key, this.callBack, required this.categoryType})
+      : super(key: key);
 
-  final Function()? callBack;
+  final Function(Entity entity)? callBack;
   @override
   _PopularEntityListViewState createState() => _PopularEntityListViewState();
 }
 
 class _PopularEntityListViewState extends State<PopularEntityListView>
     with TickerProviderStateMixin {
+  List<Entity> popularEntityList = <Entity>[];
   @override
   void initState() {
     super.initState();
   }
 
   Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
+    popularEntityList = await (ApiService().getPopular(widget.categoryType));
     return true;
   }
 
@@ -39,11 +45,13 @@ class _PopularEntityListViewState extends State<PopularEntityListView>
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
               children: List<Widget>.generate(
-                Entity.popularEntityList.length,
+                popularEntityList.length,
                 (int index) {
                   return EntityView(
-                    callback: widget.callBack,
-                    entity: Entity.popularEntityList[index],
+                    callback: () {
+                      widget.callBack!.call(popularEntityList[index]);
+                    },
+                    entity: popularEntityList[index],
                   );
                 },
               ),
@@ -77,118 +85,111 @@ class EntityView extends StatelessWidget {
         child: Stack(
           alignment: AlignmentDirectional.bottomCenter,
           children: <Widget>[
-            Container(
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: HexColor('#F8FAFB'),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(16.0)),
-                        // border: new Border.all(
-                        //     color: DesignCourseAppTheme.notWhite),
-                      ),
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 16, left: 16, right: 16),
-                                    child: Text(
-                                      entity!.title,
-                                      textAlign: TextAlign.left,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        letterSpacing: 0.27,
-                                        color: DiscoveryAppTheme.darkerText,
+            Column(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: HexColor('#F8FAFB'),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(16.0)),
+                      // border: new Border.all(
+                      //     color: DesignCourseAppTheme.notWhite),
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 16, left: 16, right: 16),
+                                child: Text(
+                                  entity!.name,
+                                  textAlign: TextAlign.left,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    letterSpacing: 0.27,
+                                    color: DiscoveryAppTheme.darkerText,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8, left: 16, right: 16, bottom: 8),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      width: 80,
+                                      child: Text(
+                                        entity!.specie,
+                                        textAlign: TextAlign.left,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w200,
+                                          fontSize: 12,
+                                          letterSpacing: 0.27,
+                                          color: DiscoveryAppTheme.grey,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 8, left: 16, right: 16, bottom: 8),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                    Row(
                                       children: <Widget>[
                                         Text(
-                                          '${entity!.lessonCount} lesson',
+                                          '${entity!.rating}',
                                           textAlign: TextAlign.left,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w200,
-                                            fontSize: 12,
+                                            fontSize: 18,
                                             letterSpacing: 0.27,
                                             color: DiscoveryAppTheme.grey,
                                           ),
                                         ),
-                                        Container(
-                                          child: Row(
-                                            children: <Widget>[
-                                              Text(
-                                                '${entity!.rating}',
-                                                textAlign: TextAlign.left,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w200,
-                                                  fontSize: 18,
-                                                  letterSpacing: 0.27,
-                                                  color: DiscoveryAppTheme.grey,
-                                                ),
-                                              ),
-                                              const Icon(
-                                                Icons.star,
-                                                color: DiscoveryAppTheme
-                                                    .nearlyBlue,
-                                                size: 20,
-                                              ),
-                                            ],
-                                          ),
-                                        )
+                                        const Icon(
+                                          Icons.star,
+                                          color: DiscoveryAppTheme.nearlyBlue,
+                                          size: 20,
+                                        ),
                                       ],
-                                    ),
-                                  ),
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                          const SizedBox(
-                            width: 48,
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(
+                          width: 48,
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 48,
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 48,
+                ),
+              ],
             ),
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 24, right: 16, left: 16),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: DiscoveryAppTheme.grey.withOpacity(0.2),
-                          offset: const Offset(0.0, 0.0),
-                          blurRadius: 6.0),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                    child: AspectRatio(
-                        aspectRatio: 1.28,
-                        child: Image.asset(entity!.imagePath)),
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(top: 24, right: 16, left: 16),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: DiscoveryAppTheme.grey.withOpacity(0.2),
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 6.0),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                  child: AspectRatio(
+                      aspectRatio: 1.28, child: Image.network(entity!.avatar)),
                 ),
               ),
             ),

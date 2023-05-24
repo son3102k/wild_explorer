@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:firebase_auth/firebase_auth.dart'
@@ -16,6 +18,7 @@ class FirebaseAuthProvider implements AuthProvider {
         options: DefaultFirebaseOptions.currentPlatform);
     final idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (idToken != null) {
+      log(idToken);
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('idToken', idToken);
     }

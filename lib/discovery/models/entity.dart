@@ -1,77 +1,41 @@
 class Entity {
+  final String name, avatar, specie, description, linkWiki;
+  final List<String> images;
+  double rating = 5.0;
   Entity({
-    this.title = '',
-    this.imagePath = '',
-    this.lessonCount = 0,
-    this.money = 0,
-    this.rating = 0.0,
+    required this.name,
+    required this.avatar,
+    required this.images,
+    required this.description,
+    required this.linkWiki,
+    required this.specie,
   });
 
-  String title;
-  int lessonCount;
-  int money;
-  double rating;
-  String imagePath;
+  static String convertUrl(String url) {
+    if (url.split('/').last == "view") {
+      final idx = url.split('/');
+      final id = idx[idx.length - 2];
+      return "https://drive.google.com/uc?export=view&id=$id";
+    } else {
+      if (url.split('=').last == "share_link") {
+        final idx = url.split('/');
+        final id = idx[idx.length - 2];
+        return "https://drive.google.com/uc?export=view&id=$id";
+      } else {
+        final id = url.split('?')[1].split('&')[0];
+        return "https://drive.google.com/uc?export=view&$id";
+      }
+    }
+  }
 
-  static List<Entity> entityList = <Entity>[
-    Entity(
-      imagePath: 'assets/design_course/interFace1.png',
-      title: 'User interface Design',
-      lessonCount: 24,
-      money: 25,
-      rating: 4.3,
-    ),
-    Entity(
-      imagePath: 'assets/design_course/interFace2.png',
-      title: 'User interface Design',
-      lessonCount: 22,
-      money: 18,
-      rating: 4.6,
-    ),
-    Entity(
-      imagePath: 'assets/design_course/interFace1.png',
-      title: 'User interface Design',
-      lessonCount: 24,
-      money: 25,
-      rating: 4.3,
-    ),
-    Entity(
-      imagePath: 'assets/design_course/interFace2.png',
-      title: 'User interface Design',
-      lessonCount: 22,
-      money: 18,
-      rating: 4.6,
-    ),
-  ];
-
-  static List<Entity> popularEntityList = <Entity>[
-    Entity(
-      imagePath: 'assets/design_course/interFace3.png',
-      title: 'App Design Course',
-      lessonCount: 12,
-      money: 25,
-      rating: 4.8,
-    ),
-    Entity(
-      imagePath: 'assets/design_course/interFace4.png',
-      title: 'Web Design Course',
-      lessonCount: 28,
-      money: 208,
-      rating: 4.9,
-    ),
-    Entity(
-      imagePath: 'assets/design_course/interFace3.png',
-      title: 'App Design Course',
-      lessonCount: 12,
-      money: 25,
-      rating: 4.8,
-    ),
-    Entity(
-      imagePath: 'assets/design_course/interFace4.png',
-      title: 'Web Design Course',
-      lessonCount: 28,
-      money: 208,
-      rating: 4.9,
-    ),
-  ];
+  factory Entity.fromJson(Map<String, dynamic> json) => Entity(
+      specie: json["specie"]["name"],
+      name: json["name"] ?? "",
+      avatar: convertUrl(json["avatar"].toString()),
+      images: json["images"]
+              .map<String>((e) => convertUrl(e["imageLink"].toString()))
+              .toList() ??
+          [],
+      description: json["description"],
+      linkWiki: json["linkWiki"]);
 }

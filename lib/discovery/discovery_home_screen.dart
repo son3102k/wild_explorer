@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wild_explorer/discovery/models/entity.dart';
 import 'package:wild_explorer/discovery/popular_entity_list_view.dart';
 import 'package:wild_explorer/discovery/utils/HexColor.dart';
 import 'entity_list_view.dart';
@@ -91,8 +92,9 @@ class _DiscoveryHomeScreenState extends State<DiscoveryHomeScreen> {
           height: 16,
         ),
         EntityListView(
-          callBack: () {
-            moveTo();
+          categoryType: categoryType,
+          callBack: (Entity entity) {
+            moveTo(entity);
           },
         ),
       ],
@@ -118,8 +120,9 @@ class _DiscoveryHomeScreenState extends State<DiscoveryHomeScreen> {
           ),
           Flexible(
             child: PopularEntityListView(
-              callBack: () {
-                moveTo();
+              categoryType: categoryType,
+              callBack: (Entity entity) {
+                moveTo(entity);
               },
             ),
           )
@@ -128,11 +131,11 @@ class _DiscoveryHomeScreenState extends State<DiscoveryHomeScreen> {
     );
   }
 
-  void moveTo() {
+  void moveTo(Entity entity) {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => EntityInfoScreen(),
+        builder: (BuildContext context) => EntityInfoScreen(entity: entity),
       ),
     );
   }

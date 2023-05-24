@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wild_explorer/discovery/discovery_home_screen.dart';
 import 'package:wild_explorer/discovery/utils/HexColor.dart';
 import 'package:wild_explorer/services/api/api_service.dart';
 
@@ -6,23 +7,26 @@ import 'discovery_app_theme.dart';
 import 'models/entity.dart';
 
 class EntityListView extends StatefulWidget {
-  const EntityListView({Key? key, this.callBack}) : super(key: key);
+  final CategoryType categoryType;
+  const EntityListView({Key? key, this.callBack, required this.categoryType})
+      : super(key: key);
 
-  final Function()? callBack;
+  final Function(Entity entity)? callBack;
   @override
   _EntityListViewState createState() => _EntityListViewState();
 }
 
 class _EntityListViewState extends State<EntityListView>
     with TickerProviderStateMixin {
+  List<Entity> entityList = <Entity>[];
+
   @override
   void initState() {
     super.initState();
   }
 
   Future<bool> getData() async {
-    await (ApiService().getFiveEntity());
-    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
+    entityList = await (ApiService().getRandomFive(widget.categoryType));
     return true;
   }
 
@@ -47,12 +51,14 @@ class _EntityListViewState extends State<EntityListView>
               return ListView.builder(
                 padding: const EdgeInsets.only(
                     top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: Entity.entityList.length,
+                itemCount: entityList.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   return CategoryView(
-                    category: Entity.entityList[index],
-                    callback: widget.callBack,
+                    category: entityList[index],
+                    callback: () {
+                      widget.callBack!.call(entityList[index]);
+                    },
                   );
                 },
               );
@@ -98,105 +104,100 @@ class CategoryView extends StatelessWidget {
                           width: 48 + 24.0,
                         ),
                         Expanded(
-                          child: Container(
-                            child: Column(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 16),
-                                  child: Text(
-                                    category!.title,
-                                    textAlign: TextAlign.left,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                      letterSpacing: 0.27,
-                                      color: DiscoveryAppTheme.darkerText,
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Text(
+                                  category!.name,
+                                  textAlign: TextAlign.left,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    letterSpacing: 0.27,
+                                    color: DiscoveryAppTheme.darkerText,
+                                  ),
+                                ),
+                              ),
+                              const Expanded(
+                                child: SizedBox(),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 16, bottom: 8),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      '${category!.specie}',
+                                      textAlign: TextAlign.left,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w200,
+                                        fontSize: 12,
+                                        letterSpacing: 0.27,
+                                        color: DiscoveryAppTheme.grey,
+                                      ),
                                     ),
-                                  ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text(
+                                          '${category!.rating}',
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w200,
+                                            fontSize: 18,
+                                            letterSpacing: 0.27,
+                                            color: DiscoveryAppTheme.grey,
+                                          ),
+                                        ),
+                                        const Icon(
+                                          Icons.star,
+                                          color: DiscoveryAppTheme.nearlyBlue,
+                                          size: 20,
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                 ),
-                                const Expanded(
-                                  child: SizedBox(),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 16, bottom: 8),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        '${category!.lessonCount} lesson',
-                                        textAlign: TextAlign.left,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w200,
-                                          fontSize: 12,
-                                          letterSpacing: 0.27,
-                                          color: DiscoveryAppTheme.grey,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 16, right: 16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      '\$${category!.rating}',
+                                      textAlign: TextAlign.left,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                        letterSpacing: 0.27,
+                                        color: DiscoveryAppTheme.nearlyBlue,
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                        color: DiscoveryAppTheme.nearlyBlue,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8.0)),
+                                      ),
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(4.0),
+                                        child: Icon(
+                                          Icons.add,
+                                          color: DiscoveryAppTheme.nearlyWhite,
                                         ),
                                       ),
-                                      Row(
-                                        children: <Widget>[
-                                          Text(
-                                            '${category!.rating}',
-                                            textAlign: TextAlign.left,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w200,
-                                              fontSize: 18,
-                                              letterSpacing: 0.27,
-                                              color: DiscoveryAppTheme.grey,
-                                            ),
-                                          ),
-                                          const Icon(
-                                            Icons.star,
-                                            color: DiscoveryAppTheme.nearlyBlue,
-                                            size: 20,
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 16, right: 16),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        '\$${category!.money}',
-                                        textAlign: TextAlign.left,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 18,
-                                          letterSpacing: 0.27,
-                                          color: DiscoveryAppTheme.nearlyBlue,
-                                        ),
-                                      ),
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                          color: DiscoveryAppTheme.nearlyBlue,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(8.0)),
-                                        ),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(4.0),
-                                          child: Icon(
-                                            Icons.add,
-                                            color:
-                                                DiscoveryAppTheme.nearlyWhite,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -213,7 +214,9 @@ class CategoryView extends StatelessWidget {
                     borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                     child: AspectRatio(
                         aspectRatio: 1.0,
-                        child: Image.asset(category!.imagePath)),
+                        child: Image.network(
+                          category!.avatar,
+                        )),
                   )
                 ],
               ),
