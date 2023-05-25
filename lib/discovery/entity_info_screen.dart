@@ -11,12 +11,16 @@ class EntityInfoScreen extends StatefulWidget {
 
 class _EntityInfoScreenState extends State<EntityInfoScreen>
     with TickerProviderStateMixin {
+  final PageController _pageController = PageController(initialPage: 0);
+  int currentPage = 0;
+
   final double infoHeight = 364.0;
   AnimationController? animationController;
   Animation<double>? animation;
   double opacity1 = 0.0;
   double opacity2 = 0.0;
   double opacity3 = 0.0;
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -26,6 +30,12 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
         curve: const Interval(0, 1.0, curve: Curves.fastOutSlowIn)));
     setData();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   Future<void> setData() async {
@@ -60,7 +70,22 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
               children: <Widget>[
                 AspectRatio(
                   aspectRatio: 1.2,
-                  child: Image.asset('assets/design_course/webInterFace.png'),
+                  child: entity.images.isNotEmpty
+                      ? PageView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: _pageController,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: entity.images.length,
+                          itemBuilder: (context, index) {
+                            return Image.network(entity.images[index]);
+                          },
+                        )
+                      : const Center(
+                          child: Text(
+                            'No images to display',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                        ),
                 ),
               ],
             ),
@@ -148,6 +173,58 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                                   ),
                                 )
                               ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 18, right: 16),
+                            child: Container(
+                              height: 50,
+                              child: ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: entity.images.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      _pageController.animateToPage(
+                                        index,
+                                        duration: const Duration(seconds: 1),
+                                        curve: Curves.easeInOut,
+                                      );
+                                      setState(() {
+                                        currentPage = index;
+                                      });
+                                    },
+                                    child: Container(
+                                      width: 50,
+                                      height: 50,
+                                      margin: const EdgeInsets.only(right: 8),
+                                      decoration: BoxDecoration(
+                                        color: index == currentPage
+                                            ? DiscoveryAppTheme.nearlyBlue
+                                            : Colors.white,
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(
+                                          width: 1,
+                                          color: DiscoveryAppTheme.nearlyBlue,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${index + 1}',
+                                          style: TextStyle(
+                                              color: index == currentPage
+                                                  ? Colors.white
+                                                  : DiscoveryAppTheme
+                                                      .nearlyBlue,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                           AnimatedOpacity(

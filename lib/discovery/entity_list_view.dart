@@ -19,6 +19,8 @@ class EntityListView extends StatefulWidget {
 class _EntityListViewState extends State<EntityListView>
     with TickerProviderStateMixin {
   List<Entity> entityList = <Entity>[];
+  List<Entity> animalList = <Entity>[];
+  List<Entity> plantList = <Entity>[];
 
   @override
   void initState() {
@@ -26,7 +28,17 @@ class _EntityListViewState extends State<EntityListView>
   }
 
   Future<bool> getData() async {
-    entityList = await (ApiService().getRandomFive(widget.categoryType));
+    if (widget.categoryType == CategoryType.animal) {
+      if (animalList.isEmpty) {
+        animalList = await (ApiService().getRandomFive(widget.categoryType));
+      }
+      entityList = animalList;
+    } else if (widget.categoryType == CategoryType.plant) {
+      if (plantList.isEmpty) {
+        plantList = await (ApiService().getRandomFive(widget.categoryType));
+      }
+      entityList = plantList;
+    }
     return true;
   }
 

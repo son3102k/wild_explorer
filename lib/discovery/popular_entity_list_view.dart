@@ -20,13 +20,27 @@ class PopularEntityListView extends StatefulWidget {
 class _PopularEntityListViewState extends State<PopularEntityListView>
     with TickerProviderStateMixin {
   List<Entity> popularEntityList = <Entity>[];
+  List<Entity> popularAnimalList = <Entity>[];
+  List<Entity> popularPlantList = <Entity>[];
+
   @override
   void initState() {
     super.initState();
   }
 
   Future<bool> getData() async {
-    popularEntityList = await (ApiService().getPopular(widget.categoryType));
+    if (widget.categoryType == CategoryType.animal) {
+      if (popularAnimalList.isEmpty) {
+        popularAnimalList =
+            await (ApiService().getPopular(widget.categoryType));
+      }
+      popularEntityList = popularAnimalList;
+    } else if (widget.categoryType == CategoryType.plant) {
+      if (popularPlantList.isEmpty) {
+        popularPlantList = await (ApiService().getPopular(widget.categoryType));
+      }
+      popularEntityList = popularPlantList;
+    }
     return true;
   }
 
@@ -123,7 +137,7 @@ class EntityView extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    Container(
+                                    SizedBox(
                                       width: 80,
                                       child: Text(
                                         entity!.specie,
@@ -144,7 +158,7 @@ class EntityView extends StatelessWidget {
                                           textAlign: TextAlign.left,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w200,
-                                            fontSize: 18,
+                                            fontSize: 14,
                                             letterSpacing: 0.27,
                                             color: DiscoveryAppTheme.grey,
                                           ),

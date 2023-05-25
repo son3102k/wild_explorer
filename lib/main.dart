@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wild_explorer/extensions/buildcontext/loc.dart';
 import 'package:wild_explorer/navigation_home_screen.dart';
 import 'package:wild_explorer/services/auth/bloc/auth_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:wild_explorer/services/auth/bloc/auth_event.dart';
 import 'package:wild_explorer/services/auth/bloc/auth_state.dart';
 import 'package:wild_explorer/services/auth/firebase_auth_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wild_explorer/services/openai/openai_model_provider.dart';
 import 'package:wild_explorer/view/auth/forgot_password_view.dart';
 import 'package:wild_explorer/view/auth/login_view.dart';
 import 'package:wild_explorer/view/auth/register_view.dart';
@@ -48,18 +50,25 @@ import 'helpers/loading/loading_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    MaterialApp(
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      title: 'Wild Explorer',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => OpenAIModelProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        title: 'Wild Explorer',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(FirebaseAuthProvider()),
+          child: const HomePage(),
+        ),
+        routes: {},
       ),
-      home: BlocProvider<AuthBloc>(
-        create: (context) => AuthBloc(FirebaseAuthProvider()),
-        child: const HomePage(),
-      ),
-      routes: {},
     ),
   );
 }
