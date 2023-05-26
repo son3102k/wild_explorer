@@ -117,6 +117,7 @@ class ApiService {
       required String modelId,
       int maxTokens = 100}) async {
     try {
+      log(message);
       var response = await http.post(Uri.parse(OpenAIEndpoints.sendMessage),
           headers: {
             "Authorization": 'Bearer ${OpenAIEndpoints.API_KEY}',

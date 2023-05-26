@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:wild_explorer/chatopenai/chat_ai_screen.dart';
+import 'package:wild_explorer/detection/detection_home_screen.dart';
 import 'package:wild_explorer/discovery/discovery_home_screen.dart';
 
 class HomeList {
@@ -21,6 +22,7 @@ class HomeList {
     ),
     HomeList(
       imagePath: 'assets/fitness_app/fitness_app.png',
+      navigateScreen: const DetectionHomeScreen(),
     ),
     HomeList(
         imagePath: 'assets/design_course/design_course.png',
