@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/discovery/discovery_home_screen.dart';
 import 'package:wild_explorer/discovery/models/entity.dart';
@@ -203,7 +204,10 @@ class EntityView extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                   child: AspectRatio(
-                      aspectRatio: 1.28, child: Image.network(entity!.avatar)),
+                      aspectRatio: 1.28,
+                      child: CachedNetworkImage(
+                        imageUrl: entity!.avatar,
+                      )),
                 ),
               ),
             ),

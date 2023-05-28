@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/discovery/models/entity.dart';
 import 'discovery_app_theme.dart';
@@ -77,7 +78,9 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                           scrollDirection: Axis.horizontal,
                           itemCount: entity.images.length,
                           itemBuilder: (context, index) {
-                            return Image.network(entity.images[index]);
+                            return CachedNetworkImage(
+                              imageUrl: entity.images[index],
+                            );
                           },
                         )
                       : const Center(

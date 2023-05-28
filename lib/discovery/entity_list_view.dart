@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/discovery/discovery_home_screen.dart';
 import 'package:wild_explorer/discovery/utils/HexColor.dart';
@@ -226,8 +227,8 @@ class CategoryView extends StatelessWidget {
                     borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                     child: AspectRatio(
                         aspectRatio: 1.0,
-                        child: Image.network(
-                          category!.avatar,
+                        child: CachedNetworkImage(
+                          imageUrl: category!.avatar,
                         )),
                   )
                 ],
