@@ -81,7 +81,7 @@ flutter:
   assets:
         - assets/images/
         - assets/design_course/
-        - assets/fitness_app/
+        - assets/detection/
         - assets/hotel/
         - assets/introduction_animation/
         - assets/icons/

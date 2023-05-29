@@ -21,7 +21,7 @@ class HomeList {
       imagePath: 'assets/hotel/hotel_booking.png',
     ),
     HomeList(
-      imagePath: 'assets/fitness_app/fitness_app.png',
+      imagePath: 'assets/detection/fitness_app.png',
       navigateScreen: const DetectionHomeScreen(),
     ),
     HomeList(

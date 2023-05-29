@@ -5,9 +5,12 @@ import 'package:wild_explorer/detection/ui_view/challenge_banner_view.dart';
 import '../ui_view/title_view.dart';
 
 class ChallengeScreen extends StatefulWidget {
-  const ChallengeScreen({Key? key, this.animationController}) : super(key: key);
+  const ChallengeScreen({Key? key, this.animationController, this.callback})
+      : super(key: key);
 
   final AnimationController? animationController;
+
+  final VoidCallback? callback;
   @override
   _ChallengeScreenState createState() => _ChallengeScreenState();
 }
@@ -74,6 +77,9 @@ class _ChallengeScreenState extends State<ChallengeScreen>
             curve: const Interval((1 / count) * 1, 1.0,
                 curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController!,
+        callback: () {
+          widget.callback?.call();
+        },
       ),
     );
   }

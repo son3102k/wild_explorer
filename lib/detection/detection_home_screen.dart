@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/detection/bottom_navigation_view/bottom_navigation_view.dart';
+import 'package:wild_explorer/detection/challenge/all_challenge_screen.dart';
 import 'package:wild_explorer/detection/challenge/challenge_screen.dart';
 import 'package:wild_explorer/detection/detection_theme.dart';
 import 'package:wild_explorer/detection/models/tabIcon_data.dart';
@@ -21,6 +22,21 @@ class _DetectionHomeScreenState extends State<DetectionHomeScreen>
     color: DetectionTheme.background,
   );
 
+  void callback() {
+    animationController?.reverse().then<dynamic>((data) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        for (int i = 0; i < tabIconsList.length; i++) {
+          tabIconsList[i].isSelected = false;
+        }
+        tabIconsList[1].isSelected = true;
+        tabBody = AllChallengeScreen(animationController: animationController);
+      });
+    });
+  }
+
   @override
   void initState() {
     for (var tab in tabIconsList) {
@@ -30,7 +46,10 @@ class _DetectionHomeScreenState extends State<DetectionHomeScreen>
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = ChallengeScreen(animationController: animationController);
+    tabBody = ChallengeScreen(
+      animationController: animationController,
+      callback: callback,
+    );
     super.initState();
   }
 
@@ -80,27 +99,29 @@ class _DetectionHomeScreenState extends State<DetectionHomeScreen>
           tabIconsList: tabIconsList,
           addClick: () {},
           changeIndex: (int index) {
-            // if (index == 0 || index == 2) {
-            //   animationController?.reverse().then<dynamic>((data) {
-            //     if (!mounted) {
-            //       return;
-            //     }
-            //     setState(() {
-            //       tabBody =
-            //           MyDiaryScreen(animationController: animationController);
-            //     });
-            //   });
-            // } else if (index == 1 || index == 3) {
-            //   animationController?.reverse().then<dynamic>((data) {
-            //     if (!mounted) {
-            //       return;
-            //     }
-            //     setState(() {
-            //       tabBody =
-            //           TrainingScreen(animationController: animationController);
-            //     });
-            //   });
-            // }
+            if (index == 0) {
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody = ChallengeScreen(
+                    animationController: animationController,
+                    callback: callback,
+                  );
+                });
+              });
+            } else {
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody = AllChallengeScreen(
+                      animationController: animationController);
+                });
+              });
+            }
           },
         ),
       ],

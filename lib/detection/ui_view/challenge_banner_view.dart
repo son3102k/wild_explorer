@@ -1,27 +1,34 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:wild_explorer/detection/challenge/challenge_detail_screen.dart';
 import 'package:wild_explorer/detection/detection_theme.dart';
 
-class ChallengeBannerView extends StatelessWidget {
+class ChallengeBannerView extends StatefulWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
-
+  final VoidCallback? callback;
   const ChallengeBannerView(
-      {Key? key, this.animationController, this.animation})
+      {Key? key, this.animationController, this.animation, this.callback})
       : super(key: key);
 
   @override
+  State<ChallengeBannerView> createState() => _ChallengeBannerViewState();
+}
+
+class _ChallengeBannerViewState extends State<ChallengeBannerView> {
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController!,
+      animation: widget.animationController!,
       builder: (BuildContext context, Widget? child) {
         return FadeTransition(
-          opacity: animation!,
+          opacity: widget.animation!,
           child: Transform(
             transform: Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation!.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.5,
@@ -31,8 +38,11 @@ class ChallengeBannerView extends StatelessWidget {
                       Colors.black.withOpacity(0.3),
                       BlendMode.srcATop,
                     ),
-                    image: const NetworkImage(
-                        'https://upload.wikimedia.org/wikipedia/commons/f/ff/%E4%B9%9D%E5%AF%A8%E6%BA%9D-%E4%BA%94%E8%8A%B1%E6%B5%B7.jpg'),
+                    image: const CachedNetworkImageProvider(
+                      'https://upload.wikimedia.org/wikipedia/commons/f/ff/%E4%B9%9D%E5%AF%A8%E6%BA%9D-%E4%BA%94%E8%8A%B1%E6%B5%B7.jpg',
+                      cacheKey:
+                          'https://upload.wikimedia.org/wikipedia/commons/f/ff/%E4%B9%9D%E5%AF%A8%E6%BA%9D-%E4%BA%94%E8%8A%B1%E6%B5%B7.jpg',
+                    ),
                     fit: BoxFit.fill),
               ),
               child: Padding(
@@ -77,8 +87,9 @@ class ChallengeBannerView extends StatelessWidget {
                           width: 80,
                           height: 80,
                           child: CustomPaint(
-                            painter:
-                                HexagonPainter(), // Màu và độ dày của border
+                            painter: HexagonPainter(
+                                color: Colors.white,
+                                filled: false), // Màu và độ dày của border
                           ),
                         ),
                         const SizedBox(
@@ -97,19 +108,46 @@ class ChallengeBannerView extends StatelessWidget {
                         )
                       ],
                     ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                    Expanded(child: Container()),
+                    Container(
+                      height: 50,
+                      width: double.infinity,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          foregroundColor: Colors.white,
+                          backgroundColor: DetectionTheme.nearlyDarkBlue,
+                          textStyle: const TextStyle(fontSize: 16),
                         ),
-                        fixedSize: const Size(double.maxFinite, 50),
-                        foregroundColor: Colors.white,
-                        backgroundColor: DetectionTheme.nearlyDarkBlue,
-                        textStyle: const TextStyle(fontSize: 16),
+                        onPressed: () {
+                          moveTo();
+                        },
+                        child: Text(
+                          "start challenge".toUpperCase(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                      onPressed: () {},
-                      child: Text("START CHALLENGE"),
                     ),
+                    Align(
+                        alignment: Alignment.center,
+                        child: TextButton(
+                          onPressed: () {
+                            widget.callback?.call();
+                          },
+                          child: Text(
+                            'View all challenges',
+                            style: TextStyle(
+                              color: Colors.white,
+                              decoration: TextDecoration.underline,
+                              fontFamily: 'Rubik',
+                              fontSize: 16,
+                            ),
+                          ),
+                        ))
                   ],
                 ),
               ),
@@ -119,18 +157,41 @@ class ChallengeBannerView extends StatelessWidget {
       },
     );
   }
+
+  void moveTo() {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => const ChallengeDetailScreen(),
+      ),
+    );
+  }
 }
 
 class HexagonPainter extends CustomPainter {
+  final Color color;
+  final bool filled;
+
+  HexagonPainter({
+    required this.color,
+    required this.filled,
+  });
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.transparent
-      ..style = PaintingStyle.fill;
+    late final paint;
+    if (filled) {
+      paint = Paint()
+        ..color = DetectionTheme.nearlyDarkBlue
+        ..style = PaintingStyle.fill;
+    } else {
+      paint = Paint()
+        ..color = Colors.transparent
+        ..style = PaintingStyle.fill;
+    }
 
     final borderPaint = Paint()..color = Colors.transparent;
 
-    final dottedPaint = Paint()..color = Colors.white;
+    final dottedPaint = Paint()..color = color;
 
     final double centerX = size.width / 2;
     final double centerY = size.height / 2;

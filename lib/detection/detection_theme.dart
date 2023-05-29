@@ -86,4 +86,18 @@ class DetectionTheme {
     letterSpacing: 0.2,
     color: lightText, // was lightText
   );
+
+  static const TextStyle h1_darkBlue = TextStyle(
+    fontFamily: 'Rubik',
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+    color: nearlyDarkBlue,
+  );
+
+  static const TextStyle h2_darkBlue = TextStyle(
+    fontFamily: 'Rubik',
+    fontWeight: FontWeight.bold,
+    fontSize: 16,
+    color: nearlyDarkBlue,
+  );
 }
