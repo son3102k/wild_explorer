@@ -1,5 +1,7 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/detection/bottom_navigation_view/bottom_navigation_view.dart';
+import 'package:wild_explorer/detection/camera_screen.dart';
 import 'package:wild_explorer/detection/challenge/all_challenge_screen.dart';
 import 'package:wild_explorer/detection/challenge/challenge_screen.dart';
 import 'package:wild_explorer/detection/detection_theme.dart';
@@ -84,6 +86,15 @@ class _DetectionHomeScreenState extends State<DetectionHomeScreen>
     );
   }
 
+  void moveToCameraScreen(List<CameraDescription> cameras) {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => CameraScreen(cameras: cameras),
+      ),
+    );
+  }
+
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 200));
     return true;
@@ -97,7 +108,10 @@ class _DetectionHomeScreenState extends State<DetectionHomeScreen>
         ),
         BottomBarView(
           tabIconsList: tabIconsList,
-          addClick: () {},
+          cameraClick: () async {
+            final List<CameraDescription> cameras = await availableCameras();
+            moveToCameraScreen(cameras);
+          },
           changeIndex: (int index) {
             if (index == 0) {
               animationController?.reverse().then<dynamic>((data) {

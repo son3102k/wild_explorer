@@ -100,4 +100,11 @@ class DetectionTheme {
     fontSize: 16,
     color: nearlyDarkBlue,
   );
+
+  static const TextStyle buttonText = TextStyle(
+    fontFamily: 'Rubik',
+    fontWeight: FontWeight.normal,
+    fontSize: 16,
+    color: Colors.white,
+  );
 }

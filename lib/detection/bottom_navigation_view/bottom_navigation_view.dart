@@ -7,11 +7,11 @@ import '../models/tabIcon_data.dart';
 
 class BottomBarView extends StatefulWidget {
   const BottomBarView(
-      {Key? key, this.tabIconsList, this.changeIndex, this.addClick})
+      {Key? key, this.tabIconsList, this.changeIndex, this.cameraClick})
       : super(key: key);
 
   final Function(int index)? changeIndex;
-  final Function()? addClick;
+  final Future<void> Function()? cameraClick;
   final List<TabIconData>? tabIconsList;
   @override
   _BottomBarViewState createState() => _BottomBarViewState();
@@ -163,7 +163,7 @@ class _BottomBarViewState extends State<BottomBarView>
                           splashColor: Colors.white.withOpacity(0.1),
                           highlightColor: Colors.transparent,
                           focusColor: Colors.transparent,
-                          onTap: widget.addClick,
+                          onTap: widget.cameraClick,
                           child: const Icon(
                             Icons.camera_alt,
                             color: DetectionTheme.white,
