@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:wild_explorer/chatopenai/chat_ai_screen.dart';
 import 'package:wild_explorer/detection/detection_home_screen.dart';
 import 'package:wild_explorer/discovery/discovery_home_screen.dart';
+import 'package:wild_explorer/quizz/hotel_home_screen.dart';
 
 class HomeList {
   HomeList({
@@ -18,8 +19,8 @@ class HomeList {
       navigateScreen: const ChatAIScreen(),
     ),
     HomeList(
-      imagePath: 'assets/hotel/hotel_booking.png',
-    ),
+        imagePath: 'assets/hotel/hotel_booking.png',
+        navigateScreen: HotelHomeScreen()),
     HomeList(
       imagePath: 'assets/detection/fitness_app.png',
       navigateScreen: const DetectionHomeScreen(),
