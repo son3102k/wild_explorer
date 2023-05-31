@@ -54,6 +54,7 @@ dependencies:
   animated_text_kit: ^4.2.2
   cached_network_image: ^3.2.3
   camera: ^0.10.5+2
+  image_picker: ^0.8.7+5
 
 dev_dependencies:
   flutter_test:
@@ -86,6 +87,7 @@ flutter:
         - assets/hotel/
         - assets/introduction_animation/
         - assets/icons/
+        - assets/model_ai/mobilenetv2.ptl
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

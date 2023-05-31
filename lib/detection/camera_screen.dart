@@ -1,5 +1,8 @@
+import 'dart:developer';
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wild_explorer/detection/detection_theme.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -13,6 +16,9 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController controller;
   CameraMenu option = CameraMenu.camera;
+  File? _image;
+  // ignore: prefer_typing_uninitialized_variables
+  late final _picker;
 
   void goBack(BuildContext context) {
     Navigator.of(context).pop();
@@ -26,6 +32,7 @@ class _CameraScreenState extends State<CameraScreen> {
       if (!mounted) {
         return;
       }
+      _picker = ImagePicker();
       setState(() {});
     }).catchError((Object e) {
       if (e is CameraException) {
@@ -45,6 +52,31 @@ class _CameraScreenState extends State<CameraScreen> {
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _openImagePicker() async {
+    final XFile? pickedImage =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+      // final output = await ImageClassification.getOutputDict(
+      //                 modelPath,
+      //                 imageData.buffer.asUint8List(
+      //                     imageData.offsetInBytes, imageData.lengthInBytes),
+      //                 imageData.lengthInBytes);
+    }
+  }
+
+  Future<void> _captureImage() async {
+    if (controller.value.isInitialized) {
+      final XFile image = await controller.takePicture();
+
+      setState(() {
+        _image = File(image.path);
+      });
+    }
   }
 
   @override
@@ -78,8 +110,12 @@ class _CameraScreenState extends State<CameraScreen> {
                     color: DetectionTheme.nearlyWhite,
                     child: Padding(
                       padding: const EdgeInsets.all(5),
-                      child: InkWell(
-                        onTap: () {},
+                      child: InkResponse(
+                        highlightShape: BoxShape.circle,
+                        onTap: () async {
+                          await _captureImage();
+                          log(_image.toString());
+                        },
                         child: Container(
                           width: 60,
                           height: 60,
@@ -134,9 +170,9 @@ class _CameraScreenState extends State<CameraScreen> {
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: TextButton(
                         onPressed: () async {
-                          setState(() {
-                            option = CameraMenu.photos;
-                          });
+                          setState(() {});
+                          await _openImagePicker();
+                          log(_image.toString());
                         },
                         child: Text(
                           CameraMenu.photos.name.toUpperCase(),
