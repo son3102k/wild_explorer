@@ -6,7 +6,7 @@ class ChatImages {
 }
 
 class OpenAIEndpoints {
-  static String API_KEY = "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";
+  static String API_KEY = "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";
   static String baseUrl = "https://api.openai.com";
   static String getAllModels = "$baseUrl/v1/models";
   static String sendMessage = "$baseUrl/v1/completions";

@@ -1,3 +1,7 @@
+import 'dart:developer';
+import 'dart:ffi';
+import 'dart:io';
+import 'dart:math' as math;
 import 'package:flutter/services.dart';
 
 class ImageClassification {
@@ -177,7 +181,13 @@ class ImageClassification {
     };
     final list =
         await pytorchChannel.invokeMethod("image_classification", para);
-    final result = list.cast<double>();
+    var result = list.cast<double>() as List<double>;
+    if (Platform.isAndroid) {
+      result = result.map((e) => math.exp(e)).toList();
+      final sum = result.reduce((value, element) => value + element);
+      result = result.map((e) => e / sum).toList();
+      log(result.toString());
+    }
     var max = -1.0;
     var maxPos = 0;
     for (var i = 0; i < 162; i++) {

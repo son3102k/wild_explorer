@@ -1,9 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wild_explorer/detection/detection_theme.dart';
+import 'package:wild_explorer/main.dart';
+
+import '../engine/image_classification.dart';
 
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -114,7 +118,20 @@ class _CameraScreenState extends State<CameraScreen> {
                         highlightShape: BoxShape.circle,
                         onTap: () async {
                           await _captureImage();
-                          log(_image.toString());
+                          log(modelPath);
+                          if (_image != null) {
+                            final bytesData = await _image!.readAsBytes();
+                            final imageData = bytesData.buffer.asByteData();
+                            final output =
+                                await ImageClassification.getOutputDict(
+                              modelPath,
+                              imageData.buffer.asUint8List(
+                                  imageData.offsetInBytes,
+                                  imageData.lengthInBytes),
+                              imageData.lengthInBytes,
+                            );
+                            log(output.toString());
+                          }
                         },
                         child: Container(
                           width: 60,
@@ -172,7 +189,20 @@ class _CameraScreenState extends State<CameraScreen> {
                         onPressed: () async {
                           setState(() {});
                           await _openImagePicker();
-                          log(_image.toString());
+                          log(modelPath);
+                          if (_image != null) {
+                            final bytesData = await _image!.readAsBytes();
+                            final imageData = bytesData.buffer.asByteData();
+                            final output =
+                                await ImageClassification.getOutputDict(
+                              modelPath,
+                              imageData.buffer.asUint8List(
+                                  imageData.offsetInBytes,
+                                  imageData.lengthInBytes),
+                              imageData.lengthInBytes,
+                            );
+                            log(output.toString());
+                          }
                         },
                         child: Text(
                           CameraMenu.photos.name.toUpperCase(),

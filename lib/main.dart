@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wild_explorer/extensions/buildcontext/loc.dart';
+import 'package:wild_explorer/helpers/model_ai/load_model.dart';
 import 'package:wild_explorer/navigation_home_screen.dart';
 import 'package:wild_explorer/services/auth/bloc/auth_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,8 +50,12 @@ import 'helpers/loading/loading_screen.dart';
 //   }
 // }
 
-void main() {
+late String modelPath;
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  modelPath = await savingModelFile();
+  log(modelPath);
   runApp(
     MultiProvider(
       providers: [
