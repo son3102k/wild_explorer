@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:wild_explorer/chatopenai/chat_ai_screen.dart';
 import 'package:wild_explorer/detection/detection_home_screen.dart';
 import 'package:wild_explorer/discovery/discovery_home_screen.dart';
-import 'package:wild_explorer/quizz/hotel_home_screen.dart';
+import 'package:wild_explorer/quizz/quizz_home_screen.dart';
 
 class HomeList {
   HomeList({

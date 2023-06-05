@@ -9,51 +9,39 @@ class PopularFilterListData {
 
   static List<PopularFilterListData> popularFList = <PopularFilterListData>[
     PopularFilterListData(
-      titleTxt: 'Free Breakfast',
+      titleTxt: 'Atoms',
       isSelected: false,
     ),
     PopularFilterListData(
-      titleTxt: 'Free Parking',
+      titleTxt: 'Cells',
       isSelected: false,
     ),
     PopularFilterListData(
-      titleTxt: 'Pool',
-      isSelected: true,
-    ),
-    PopularFilterListData(
-      titleTxt: 'Pet Friendly',
+      titleTxt: 'Genetics',
       isSelected: false,
     ),
     PopularFilterListData(
-      titleTxt: 'Free wifi',
+      titleTxt: 'minerals',
+      isSelected: false,
+    ),
+    PopularFilterListData(
+      titleTxt: 'rocks',
       isSelected: false,
     ),
   ];
 
-  static List<PopularFilterListData> accomodationList = [
+  static List<PopularFilterListData> typeList = [
     PopularFilterListData(
       titleTxt: 'All',
-      isSelected: false,
-    ),
-    PopularFilterListData(
-      titleTxt: 'Apartment',
-      isSelected: false,
-    ),
-    PopularFilterListData(
-      titleTxt: 'Home',
       isSelected: true,
     ),
     PopularFilterListData(
-      titleTxt: 'Villa',
-      isSelected: false,
+      titleTxt: 'Quizz',
+      isSelected: true,
     ),
     PopularFilterListData(
-      titleTxt: 'Hotel',
-      isSelected: false,
-    ),
-    PopularFilterListData(
-      titleTxt: 'Resort',
-      isSelected: false,
+      titleTxt: 'Lesson',
+      isSelected: true,
     ),
   ];
 }

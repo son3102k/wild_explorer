@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'range_slider_view.dart';
-import 'slider_view.dart';
-import 'hotel_app_theme.dart';
+import 'quizz_theme.dart';
 import 'model/popular_filter_list.dart';
 
 class FiltersScreen extends StatefulWidget {
@@ -14,9 +13,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
   List<PopularFilterListData> popularFilterListData =
       PopularFilterListData.popularFList;
   List<PopularFilterListData> accomodationListData =
-      PopularFilterListData.accomodationList;
+      PopularFilterListData.typeList;
 
-  RangeValues _values = const RangeValues(100, 600);
+  RangeValues _values = const RangeValues(0, 5);
   double distValue = 50.0;
 
   @override
@@ -32,15 +31,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    priceBarFilter(),
+                    difficultBarFilter(),
                     const Divider(
                       height: 1,
                     ),
                     popularFilter(),
-                    const Divider(
-                      height: 1,
-                    ),
-                    distanceViewUI(),
                     const Divider(
                       height: 1,
                     ),
@@ -104,7 +99,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           padding:
               const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
           child: Text(
-            'Type of Accommodation',
+            'Type',
             textAlign: TextAlign.left,
             style: TextStyle(
                 color: Colors.grey,
@@ -115,7 +110,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
         Padding(
           padding: const EdgeInsets.only(right: 16, left: 16),
           child: Column(
-            children: getAccomodationListUI(),
+            children: getTypeQuizzUI(),
           ),
         ),
         const SizedBox(
@@ -125,7 +120,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
     );
   }
 
-  List<Widget> getAccomodationListUI() {
+  List<Widget> getTypeQuizzUI() {
     final List<Widget> noList = <Widget>[];
     for (int i = 0; i < accomodationListData.length; i++) {
       final PopularFilterListData date = accomodationListData[i];
@@ -206,36 +201,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
         accomodationListData[0].isSelected = false;
       }
     }
-  }
-
-  Widget distanceViewUI() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-          child: Text(
-            'Distance from city center',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                color: Colors.grey,
-                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                fontWeight: FontWeight.normal),
-          ),
-        ),
-        SliderView(
-          distValue: distValue,
-          onChangedistValue: (double value) {
-            distValue = value;
-          },
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-      ],
-    );
   }
 
   Widget popularFilter() {
@@ -334,7 +299,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
     return noList;
   }
 
-  Widget priceBarFilter() {
+  Widget difficultBarFilter() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -342,7 +307,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            'Price (for 1 night)',
+            'Difficulty (0 - 5)',
             textAlign: TextAlign.left,
             style: TextStyle(
                 color: Colors.grey,

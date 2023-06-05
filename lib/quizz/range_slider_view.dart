@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'hotel_app_theme.dart';
+import 'quizz_theme.dart';
 
 class RangeSliderView extends StatefulWidget {
   const RangeSliderView({Key? key, this.values, this.onChangeRangeValues})
@@ -38,12 +38,12 @@ class _RangeSliderViewState extends State<RangeSliderView> {
                   Container(
                     width: 54,
                     child: Text(
-                      '\$${_values!.start.round()}',
+                      '${_values!.start.round()}',
                       textAlign: TextAlign.center,
                     ),
                   ),
                   Expanded(
-                    flex: 1000 - _values!.start.round(),
+                    flex: 5 - _values!.start.round(),
                     child: const SizedBox(),
                   ),
                 ],
@@ -57,12 +57,12 @@ class _RangeSliderViewState extends State<RangeSliderView> {
                   Container(
                     width: 54,
                     child: Text(
-                      '\$${_values!.end.round()}',
+                      '${_values!.end.round()}',
                       textAlign: TextAlign.center,
                     ),
                   ),
                   Expanded(
-                    flex: 1000 - _values!.end.round(),
+                    flex: 5 - _values!.end.round(),
                     child: const SizedBox(),
                   ),
                 ],
@@ -76,10 +76,10 @@ class _RangeSliderViewState extends State<RangeSliderView> {
             child: RangeSlider(
               values: _values!,
               min: 0.0,
-              max: 1000.0,
+              max: 5.0,
               activeColor: HotelAppTheme.buildLightTheme().primaryColor,
               inactiveColor: Colors.grey.withOpacity(0.4),
-              divisions: 1000,
+              divisions: 5,
               onChanged: (RangeValues values) {
                 try {
                   setState(() {
