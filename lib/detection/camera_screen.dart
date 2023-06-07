@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wild_explorer/detection/detected_screen.dart';
 import 'package:wild_explorer/detection/detection_theme.dart';
 import 'package:wild_explorer/main.dart';
 
@@ -26,6 +26,32 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void goBack(BuildContext context) {
     Navigator.of(context).pop();
+  }
+
+  void goDetectedScreen() {
+    if (_image != null) {
+      Navigator.push<dynamic>(
+        context,
+        MaterialPageRoute<dynamic>(
+          builder: (BuildContext context) => DetectedScreen(image: _image!),
+        ),
+      );
+    }
+  }
+
+  Future<Map<String, double>?> classify() async {
+    if (_image != null) {
+      final bytesData = await _image!.readAsBytes();
+      final imageData = bytesData.buffer.asByteData();
+      final output = await ImageClassification.getOutputDict(
+        modelPath,
+        imageData.buffer
+            .asUint8List(imageData.offsetInBytes, imageData.lengthInBytes),
+        imageData.lengthInBytes,
+      );
+      return output;
+    }
+    return null;
   }
 
   @override
@@ -65,11 +91,10 @@ class _CameraScreenState extends State<CameraScreen> {
       setState(() {
         _image = File(pickedImage.path);
       });
-      // final output = await ImageClassification.getOutputDict(
-      //                 modelPath,
-      //                 imageData.buffer.asUint8List(
-      //                     imageData.offsetInBytes, imageData.lengthInBytes),
-      //                 imageData.lengthInBytes);
+    } else {
+      setState(() {
+        _image = null;
+      });
     }
   }
 
@@ -118,20 +143,7 @@ class _CameraScreenState extends State<CameraScreen> {
                         highlightShape: BoxShape.circle,
                         onTap: () async {
                           await _captureImage();
-                          log(modelPath);
-                          if (_image != null) {
-                            final bytesData = await _image!.readAsBytes();
-                            final imageData = bytesData.buffer.asByteData();
-                            final output =
-                                await ImageClassification.getOutputDict(
-                              modelPath,
-                              imageData.buffer.asUint8List(
-                                  imageData.offsetInBytes,
-                                  imageData.lengthInBytes),
-                              imageData.lengthInBytes,
-                            );
-                            log(output.toString());
-                          }
+                          goDetectedScreen();
                         },
                         child: Container(
                           width: 60,
@@ -189,20 +201,7 @@ class _CameraScreenState extends State<CameraScreen> {
                         onPressed: () async {
                           setState(() {});
                           await _openImagePicker();
-                          log(modelPath);
-                          if (_image != null) {
-                            final bytesData = await _image!.readAsBytes();
-                            final imageData = bytesData.buffer.asByteData();
-                            final output =
-                                await ImageClassification.getOutputDict(
-                              modelPath,
-                              imageData.buffer.asUint8List(
-                                  imageData.offsetInBytes,
-                                  imageData.lengthInBytes),
-                              imageData.lengthInBytes,
-                            );
-                            log(output.toString());
-                          }
+                          goDetectedScreen();
                         },
                         child: Text(
                           CameraMenu.photos.name.toUpperCase(),

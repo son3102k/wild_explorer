@@ -1,5 +1,3 @@
-import 'dart:developer';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:flutter/services.dart';
@@ -186,7 +184,6 @@ class ImageClassification {
       result = result.map((e) => math.exp(e)).toList();
       final sum = result.reduce((value, element) => value + element);
       result = result.map((e) => e / sum).toList();
-      log(result.toString());
     }
     var max = -1.0;
     var maxPos = 0;

@@ -12,6 +12,34 @@ import 'package:wild_explorer/discovery/models/entity.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
+  Future<Entity?> getEntityBy(String name) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? idToken = prefs.getString('idToken');
+      final Uri url =
+          Uri.parse(ApiConstants.baseUrl + ApiConstants.getEntityByName + name);
+      var response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer $idToken',
+        },
+      );
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        int code = result["code"];
+        if (code == 0) {
+          dynamic data = result["data"];
+          return Entity.fromJson(data);
+        }
+      }
+    } catch (_) {
+      return null;
+    }
+    return null;
+  }
+
   Future<List<Entity>> getPopular(CategoryType categoryType) async {
     try {
       List<Entity> listEntity = <Entity>[];

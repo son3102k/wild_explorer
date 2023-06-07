@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wild_explorer/extensions/buildcontext/loc.dart';
@@ -55,7 +53,6 @@ late String modelPath;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   modelPath = await savingModelFile();
-  log(modelPath);
   runApp(
     MultiProvider(
       providers: [
