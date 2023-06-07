@@ -1,10 +1,10 @@
 import 'dart:developer';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/detection/detection_theme.dart';
+import 'package:wild_explorer/discovery/entity_info_screen.dart';
 import 'package:wild_explorer/discovery/models/entity.dart';
 import 'package:wild_explorer/engine/image_classification.dart';
 import 'package:wild_explorer/main.dart';
@@ -30,7 +30,8 @@ class _DetectedScreenState extends State<DetectedScreen> {
           .asUint8List(imageData.offsetInBytes, imageData.lengthInBytes),
       imageData.lengthInBytes,
     );
-    if (output.values.first > 0.5) {
+    log(output.toString());
+    if (output.values.first > 0.2) {
       final specieName = output.keys.first;
       detectedEntity = await ApiService().getEntityBy(specieName);
     }
@@ -40,6 +41,21 @@ class _DetectedScreenState extends State<DetectedScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  moveTo() {
+    if (detectedEntity != null) {
+      Navigator.push<dynamic>(
+        context,
+        MaterialPageRoute<dynamic>(
+          builder: (BuildContext context) => EntityInfoScreen(
+            entity: detectedEntity!,
+          ),
+        ),
+      );
+    } else {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -57,38 +73,102 @@ class _DetectedScreenState extends State<DetectedScreen> {
             if (!snapshot.hasData) {
               return SizedBox();
             } else {
-              return Stack(
+              return Column(
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    color: DetectionTheme.nearlyDarkBlue,
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    child: Transform.translate(
-                      offset: const Offset(0, 40),
-                      child: SizedBox(
+                  Stack(
+                    children: [
+                      Container(
                         width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CircleAvatar(
-                              radius: 50,
-                              backgroundImage: FileImage(widget.image),
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        color: DetectionTheme.nearlyDarkBlue,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        child: Transform.translate(
+                          offset: const Offset(0, 40),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                CircleAvatar(
+                                  radius: 50,
+                                  backgroundImage: FileImage(widget.image),
+                                ),
+                                detectedEntity == null
+                                    ? const SizedBox()
+                                    : CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                          detectedEntity!.avatar,
+                                          cacheKey: detectedEntity!.avatar,
+                                        ),
+                                      ),
+                              ],
                             ),
-                            detectedEntity == null
-                                ? const SizedBox()
-                                : CircleAvatar(
-                                    radius: 50,
-                                    backgroundImage: CachedNetworkImageProvider(
-                                      detectedEntity!.avatar,
-                                      cacheKey: detectedEntity!.avatar,
-                                    ),
-                                  ),
-                          ],
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(50),
+                    child: Column(
+                      children: [
+                        Text(
+                          detectedEntity != null
+                              ? "We belive this is a".toUpperCase()
+                              : "We couldn't identify the exact species"
+                                  .toUpperCase(),
+                          style: DetectionTheme.h1_darkBlue,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        detectedEntity != null
+                            ? Text(
+                                detectedEntity!.name.toUpperCase(),
+                                style: const TextStyle(
+                                  fontFamily: 'Rubik',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              )
+                            : const SizedBox(),
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        Container(
+                          height: 50,
+                          width: double.infinity,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              foregroundColor: Colors.white,
+                              backgroundColor: DetectionTheme.nearlyDarkBlue,
+                              textStyle: const TextStyle(fontSize: 16),
+                            ),
+                            onPressed: () {
+                              moveTo();
+                            },
+                            child: Text(
+                              detectedEntity != null
+                                  ? "view detail".toUpperCase()
+                                  : "take another photo".toUpperCase(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

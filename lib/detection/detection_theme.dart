@@ -92,6 +92,7 @@ class DetectionTheme {
     fontWeight: FontWeight.bold,
     fontSize: 20,
     color: nearlyDarkBlue,
+    height: 1.5,
   );
 
   static const TextStyle h2_darkBlue = TextStyle(

@@ -193,7 +193,6 @@ class ImageClassification {
         maxPos = i;
       }
     }
-    if (max < 0.5) max += 0.5;
     var output = {mapDiscovery[maxPos].toString(): max};
     return output;
   }
