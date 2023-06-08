@@ -7,4 +7,5 @@ class ApiConstants {
   static String getFiveAnimalEntityUrl = 'get/entity-top-n?tag_id=1&number=5';
   static String getFivePlantEntityUrl = 'get/entity-top-n?tag_id=2&number=5';
   static String getEntityByName = 'get/entity?name=';
+  static String getQuizListData = 'quiz/list';
 }

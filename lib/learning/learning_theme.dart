@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/discovery/utils/HexColor.dart';
 
-class HotelAppTheme {
+class LearningTheme {
   static TextTheme _buildTextTheme(TextTheme base) {
     const String fontName = 'WorkSans';
     return base.copyWith(

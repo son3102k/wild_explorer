@@ -29,13 +29,14 @@ class Entity {
   }
 
   factory Entity.fromJson(Map<String, dynamic> json) => Entity(
-      specie: json["specie"]["name"],
-      name: json["name"] ?? "",
-      avatar: convertUrl(json["avatar"].toString()),
-      images: json["images"]
-              .map<String>((e) => convertUrl(e["imageLink"].toString()))
-              .toList() ??
-          [],
-      description: json["description"],
-      linkWiki: json["linkWiki"]);
+        specie: json["specie"]["name"],
+        name: json["name"] ?? "",
+        avatar: convertUrl(json["avatar"].toString()),
+        images: json["images"]
+                .map<String>((e) => convertUrl(e["imageLink"].toString()))
+                .toList() ??
+            [],
+        description: json["description"],
+        linkWiki: json["linkWiki"],
+      );
 }

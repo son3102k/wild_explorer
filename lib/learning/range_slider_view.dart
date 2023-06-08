@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'quizz_theme.dart';
+import 'learning_theme.dart';
 
 class RangeSliderView extends StatefulWidget {
   const RangeSliderView({Key? key, this.values, this.onChangeRangeValues})
@@ -77,7 +77,7 @@ class _RangeSliderViewState extends State<RangeSliderView> {
               values: _values!,
               min: 0.0,
               max: 5.0,
-              activeColor: HotelAppTheme.buildLightTheme().primaryColor,
+              activeColor: LearningTheme.buildLightTheme().primaryColor,
               inactiveColor: Colors.grey.withOpacity(0.4),
               divisions: 5,
               onChanged: (RangeValues values) {

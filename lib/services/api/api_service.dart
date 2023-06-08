@@ -10,8 +10,42 @@ import 'package:wild_explorer/constants/api.dart';
 import 'package:wild_explorer/discovery/discovery_home_screen.dart';
 import 'package:wild_explorer/discovery/models/entity.dart';
 import 'package:http/http.dart' as http;
+import 'package:wild_explorer/learning/model/list_data.dart';
 
 class ApiService {
+  Future<List<ListData>> getQuizListData() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? idToken = prefs.getString('idToken');
+      final Uri url =
+          Uri.parse(ApiConstants.baseUrl + ApiConstants.getQuizListData);
+      List<ListData> quizList = [];
+      var response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer $idToken',
+        },
+      );
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        int code = result["code"];
+        if (code == 0) {
+          List<dynamic> listData = result["data"];
+          if (listData.isNotEmpty) {
+            for (int i = 0; i < listData.length; i++) {
+              quizList.add(ListData.fromJson(listData[i]));
+            }
+          }
+        }
+      }
+      return quizList;
+    } catch (_) {
+      return [];
+    }
+  }
+
   Future<Entity?> getEntityBy(String name) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -1,20 +1,22 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import 'quizz_theme.dart';
-import 'model/hotel_list_data.dart';
+import 'learning_theme.dart';
+import 'model/list_data.dart';
 
-class HotelListView extends StatelessWidget {
-  const HotelListView(
+class HomeListView extends StatelessWidget {
+  const HomeListView(
       {Key? key,
-      this.hotelData,
+      this.listData,
       this.animationController,
       this.animation,
       this.callback})
       : super(key: key);
 
   final VoidCallback? callback;
-  final HotelListData? hotelData;
+  final ListData? listData;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
@@ -53,13 +55,14 @@ class HotelListView extends StatelessWidget {
                           children: <Widget>[
                             AspectRatio(
                               aspectRatio: 2,
-                              child: Image.asset(
-                                hotelData!.imagePath,
+                              child: CachedNetworkImage(
+                                imageUrl: listData!.imagePath,
+                                cacheKey: listData!.imagePath,
                                 fit: BoxFit.cover,
                               ),
                             ),
                             Container(
-                              color: HotelAppTheme.buildLightTheme()
+                              color: LearningTheme.buildLightTheme()
                                   .backgroundColor,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -77,7 +80,7 @@ class HotelListView extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              hotelData!.titleTxt,
+                                              listData!.titleTxt,
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
@@ -91,7 +94,7 @@ class HotelListView extends StatelessWidget {
                                                   MainAxisAlignment.start,
                                               children: <Widget>[
                                                 Text(
-                                                  hotelData!.subTxt,
+                                                  listData!.subTxt,
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       color: Colors.grey
@@ -100,22 +103,17 @@ class HotelListView extends StatelessWidget {
                                                 const SizedBox(
                                                   width: 4,
                                                 ),
-                                                Icon(
-                                                  Icons.location_on_rounded,
-                                                  size: 12,
-                                                  color: HotelAppTheme
-                                                          .buildLightTheme()
-                                                      .primaryColor,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    '${hotelData!.dist.toStringAsFixed(1)} km to city',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
+                                                Text(
+                                                  listData!.difficult > 0 &&
+                                                          listData!.difficult <
+                                                              1.5
+                                                      ? "easy"
+                                                      : (listData!.difficult <
+                                                              3.5
+                                                          ? "medium"
+                                                          : "hard"),
+                                                  style: TextStyle(
+                                                    color: Colors.black38,
                                                   ),
                                                 ),
                                               ],
@@ -127,7 +125,7 @@ class HotelListView extends StatelessWidget {
                                                 children: <Widget>[
                                                   RatingBar(
                                                     initialRating:
-                                                        hotelData!.rating,
+                                                        listData!.difficult,
                                                     direction: Axis.horizontal,
                                                     allowHalfRating: true,
                                                     itemCount: 5,
@@ -135,20 +133,20 @@ class HotelListView extends StatelessWidget {
                                                     ratingWidget: RatingWidget(
                                                       full: Icon(
                                                         Icons.star_rate_rounded,
-                                                        color: HotelAppTheme
+                                                        color: LearningTheme
                                                                 .buildLightTheme()
                                                             .primaryColor,
                                                       ),
                                                       half: Icon(
                                                         Icons.star_half_rounded,
-                                                        color: HotelAppTheme
+                                                        color: LearningTheme
                                                                 .buildLightTheme()
                                                             .primaryColor,
                                                       ),
                                                       empty: Icon(
                                                         Icons
                                                             .star_border_rounded,
-                                                        color: HotelAppTheme
+                                                        color: LearningTheme
                                                                 .buildLightTheme()
                                                             .primaryColor,
                                                       ),
@@ -159,13 +157,6 @@ class HotelListView extends StatelessWidget {
                                                       print(rating);
                                                     },
                                                   ),
-                                                  Text(
-                                                    ' ${hotelData!.reviews} Reviews',
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
-                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -175,32 +166,19 @@ class HotelListView extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 16, top: 8),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        Text(
-                                          '\$${hotelData!.perNight}',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 22,
+                                    padding: EdgeInsets.all(12),
+                                    child: listData!.type == DataType.quiz
+                                        ? SvgPicture.asset(
+                                            "assets/icons/cup-svgrepo-com.svg",
+                                            width: 40,
+                                            height: 40,
+                                          )
+                                        : SvgPicture.asset(
+                                            "assets/icons/book-closed-svgrepo-com.svg",
+                                            width: 40,
+                                            height: 40,
                                           ),
-                                        ),
-                                        Text(
-                                          '/per night',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Colors.grey.withOpacity(0.8)),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  )
                                 ],
                               ),
                             ),
@@ -220,7 +198,7 @@ class HotelListView extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Icon(
                                   Icons.favorite_border,
-                                  color: HotelAppTheme.buildLightTheme()
+                                  color: LearningTheme.buildLightTheme()
                                       .primaryColor,
                                 ),
                               ),
