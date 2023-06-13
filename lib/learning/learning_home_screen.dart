@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/learning/home_list_view.dart';
 import 'package:wild_explorer/learning/model/list_data.dart';
+import 'package:wild_explorer/learning/quiz_screen.dart';
 import 'package:wild_explorer/services/api/api_service.dart';
 import 'filters_screen.dart';
 import 'learning_theme.dart';
@@ -131,7 +132,19 @@ class _LearningHomeScreenState extends State<LearnHomeScreen>
                       animationController?.forward();
 
                       return HomeListView(
-                        callback: () {},
+                        callback: () {
+                          if (learningList[index].type == DataType.quiz) {
+                            Navigator.push<dynamic>(
+                              context,
+                              MaterialPageRoute<dynamic>(
+                                builder: (BuildContext context) => QuizScreen(
+                                  title: learningList[index].titleTxt,
+                                  quizId: learningList[index].id,
+                                ),
+                              ),
+                            );
+                          }
+                        },
                         listData: learningList[index],
                         animation: animation,
                         animationController: animationController!,

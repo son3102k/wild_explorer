@@ -11,8 +11,42 @@ import 'package:wild_explorer/discovery/discovery_home_screen.dart';
 import 'package:wild_explorer/discovery/models/entity.dart';
 import 'package:http/http.dart' as http;
 import 'package:wild_explorer/learning/model/list_data.dart';
+import 'package:wild_explorer/learning/model/question.dart';
 
 class ApiService {
+  Future<List<Question>> getQuiz(int id) async {
+    try {
+      List<Question> questionList = [];
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? idToken = prefs.getString('idToken');
+      final Uri url = Uri.parse(
+          ApiConstants.baseUrl + ApiConstants.getQuizById + id.toString());
+      var response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer $idToken',
+        },
+      );
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        int code = result["code"];
+        if (code == 0) {
+          List<dynamic> listJsonQuestion = result["data"];
+          if (listJsonQuestion.isNotEmpty) {
+            for (int i = 0; i < listJsonQuestion.length; i++) {
+              questionList.add(Question.fromJson(listJsonQuestion[i]));
+            }
+          }
+        }
+      }
+      return questionList;
+    } catch (_) {
+      return [];
+    }
+  }
+
   Future<List<ListData>> getQuizListData() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();

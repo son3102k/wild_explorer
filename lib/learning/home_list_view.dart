@@ -7,13 +7,13 @@ import 'learning_theme.dart';
 import 'model/list_data.dart';
 
 class HomeListView extends StatelessWidget {
-  const HomeListView(
-      {Key? key,
-      this.listData,
-      this.animationController,
-      this.animation,
-      this.callback})
-      : super(key: key);
+  const HomeListView({
+    Key? key,
+    this.listData,
+    this.animationController,
+    this.animation,
+    this.callback,
+  }) : super(key: key);
 
   final VoidCallback? callback;
   final ListData? listData;
@@ -153,9 +153,7 @@ class HomeListView extends StatelessWidget {
                                                     ),
                                                     itemPadding:
                                                         EdgeInsets.zero,
-                                                    onRatingUpdate: (rating) {
-                                                      print(rating);
-                                                    },
+                                                    onRatingUpdate: (rating) {},
                                                   ),
                                                 ],
                                               ),
