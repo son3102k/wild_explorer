@@ -10,10 +10,74 @@ import 'package:wild_explorer/constants/api.dart';
 import 'package:wild_explorer/discovery/discovery_home_screen.dart';
 import 'package:wild_explorer/discovery/models/entity.dart';
 import 'package:http/http.dart' as http;
+import 'package:wild_explorer/learning/model/lesson_detail.dart';
 import 'package:wild_explorer/learning/model/list_data.dart';
 import 'package:wild_explorer/learning/model/question.dart';
 
 class ApiService {
+  Future<LessonDetail> getLessonDetail(int id) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? idToken = prefs.getString('idToken');
+      final Uri url = Uri.parse(
+          ApiConstants.baseUrl + ApiConstants.getLessonDetail + id.toString());
+      var response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer $idToken',
+        },
+      );
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        int code = result["code"];
+        if (code == 0) {
+          dynamic data = result["data"];
+          if (data != null) {
+            return LessonDetail.fromJson(data);
+          }
+        }
+      }
+      return LessonDetail(content: "");
+    } catch (_) {
+      return LessonDetail(content: "");
+    }
+  }
+
+  Future<List<ListData>> getLessonListData() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? idToken = prefs.getString('idToken');
+      final Uri url =
+          Uri.parse(ApiConstants.baseUrl + ApiConstants.getLessonListData);
+      List<ListData> lessonList = [];
+      var response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer $idToken',
+        },
+      );
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        int code = result["code"];
+        if (code == 0) {
+          List<dynamic> listData = result["data"];
+          if (listData.isNotEmpty) {
+            for (int i = 0; i < listData.length; i++) {
+              lessonList.add(ListData.fromJson(listData[i]));
+            }
+          }
+        }
+      }
+      return lessonList;
+    } catch (_) {
+      return [];
+    }
+  }
+
   Future<List<Question>> getQuiz(int id) async {
     try {
       List<Question> questionList = [];

@@ -253,11 +253,10 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                                     left: 16, right: 16, top: 8, bottom: 8),
                                 child: Text(
                                   entity.description,
-                                  textAlign: TextAlign.justify,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w200,
                                     fontSize: 14,
-                                    letterSpacing: 0.27,
+                                    letterSpacing: 0.85,
                                     color: DiscoveryAppTheme.grey,
                                   ),
                                   maxLines: 10,

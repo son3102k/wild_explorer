@@ -20,6 +20,7 @@ class ListData {
         imagePath: json["imageLink"] ?? '',
         titleTxt: json["name"],
         subTxt: '',
+        difficult: json["level"],
         type: json["type"] == "quiz" ? DataType.quiz : DataType.lesson,
       );
 }

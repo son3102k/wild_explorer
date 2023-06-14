@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/learning/home_list_view.dart';
+import 'package:wild_explorer/learning/lesson_screen.dart';
 import 'package:wild_explorer/learning/model/list_data.dart';
 import 'package:wild_explorer/learning/quiz_screen.dart';
 import 'package:wild_explorer/services/api/api_service.dart';
@@ -16,6 +17,7 @@ class _LearningHomeScreenState extends State<LearnHomeScreen>
   AnimationController? animationController;
   List<ListData> quizListData = <ListData>[];
   List<ListData> learningList = <ListData>[];
+  List<ListData> lessonListData = <ListData>[];
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -29,6 +31,10 @@ class _LearningHomeScreenState extends State<LearnHomeScreen>
     if (quizListData.isEmpty) {
       quizListData = await ApiService().getQuizListData();
       learningList.addAll(quizListData);
+    }
+    if (lessonListData.isEmpty) {
+      lessonListData = await ApiService().getLessonListData();
+      learningList.addAll(lessonListData);
     }
     return true;
   }
@@ -140,6 +146,17 @@ class _LearningHomeScreenState extends State<LearnHomeScreen>
                                 builder: (BuildContext context) => QuizScreen(
                                   title: learningList[index].titleTxt,
                                   quizId: learningList[index].id,
+                                ),
+                              ),
+                            );
+                          } else if (learningList[index].type ==
+                              DataType.lesson) {
+                            Navigator.push<dynamic>(
+                              context,
+                              MaterialPageRoute<dynamic>(
+                                builder: (BuildContext context) => LessonScreen(
+                                  title: learningList[index].titleTxt,
+                                  lessonId: learningList[index].id,
                                 ),
                               ),
                             );
