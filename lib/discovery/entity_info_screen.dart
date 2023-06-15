@@ -182,7 +182,12 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                             padding: const EdgeInsets.only(left: 18, right: 16),
                             child: Container(
                               height: 50,
-                              child: ListView.builder(
+                              child: ListView.separated(
+                                separatorBuilder: (context, index) {
+                                  return SizedBox(
+                                    width: 10,
+                                  );
+                                },
                                 physics: const NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 itemCount: entity.images.length,
@@ -201,7 +206,6 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                                     child: Container(
                                       width: 50,
                                       height: 50,
-                                      margin: const EdgeInsets.only(right: 8),
                                       decoration: BoxDecoration(
                                         color: index == currentPage
                                             ? DiscoveryAppTheme.nearlyBlue

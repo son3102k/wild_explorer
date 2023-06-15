@@ -33,6 +33,8 @@ class _DiscoveryHomeScreenState extends State<DiscoveryHomeScreen> {
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       getSearchBarUI(),
                       getCategoryUI(),
@@ -105,8 +107,8 @@ class _DiscoveryHomeScreenState extends State<DiscoveryHomeScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           const Text(
             'Popular',

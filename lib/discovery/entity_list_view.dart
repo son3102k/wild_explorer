@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/discovery/discovery_home_screen.dart';
 import 'package:wild_explorer/discovery/utils/HexColor.dart';
+import 'package:wild_explorer/helpers/skeleton/NewsCardSkelton.dart';
 import 'package:wild_explorer/services/api/api_service.dart';
 
 import 'discovery_app_theme.dart';
@@ -29,15 +30,15 @@ class _EntityListViewState extends State<EntityListView>
   }
 
   Future<bool> getData() async {
+    if (animalList.isEmpty) {
+      animalList = await (ApiService().getRandomFive(widget.categoryType));
+    }
+    if (plantList.isEmpty) {
+      plantList = await (ApiService().getRandomFive(widget.categoryType));
+    }
     if (widget.categoryType == CategoryType.animal) {
-      if (animalList.isEmpty) {
-        animalList = await (ApiService().getRandomFive(widget.categoryType));
-      }
       entityList = animalList;
     } else if (widget.categoryType == CategoryType.plant) {
-      if (plantList.isEmpty) {
-        plantList = await (ApiService().getRandomFive(widget.categoryType));
-      }
       entityList = plantList;
     }
     return true;
@@ -59,7 +60,10 @@ class _EntityListViewState extends State<EntityListView>
           future: getData(),
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (!snapshot.hasData) {
-              return const SizedBox();
+              return Padding(
+                padding: EdgeInsets.all(16),
+                child: const NewsCardSkelton(),
+              );
             } else {
               return ListView.builder(
                 padding: const EdgeInsets.only(

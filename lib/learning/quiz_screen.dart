@@ -18,6 +18,7 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
+  bool _isLoading = false;
   List<Question>? questionList;
   int _index = 0;
   List<bool> questionNumber = List.filled(5, false);
@@ -30,6 +31,7 @@ class _QuizScreenState extends State<QuizScreen> {
     } else {
       questionList = await ApiService().getQuiz(widget.quizId);
     }
+    await Future.delayed(Duration(milliseconds: 500));
     return true;
   }
 
@@ -39,10 +41,15 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
-  void newQuiz() {
+  Future<void> newQuiz() async {
     setState(() {
+      _isLoading = true;
       _index = 0;
       questionList = null;
+    });
+    await Future.delayed(Duration(milliseconds: 500));
+    setState(() {
+      _isLoading = false;
     });
   }
 
@@ -65,8 +72,11 @@ class _QuizScreenState extends State<QuizScreen> {
       body: FutureBuilder(
         future: fetchData(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Container();
+          if (!snapshot.hasData || _isLoading) {
+            return Align(
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(),
+            );
           } else {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -169,8 +179,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                             textStyle:
                                                 const TextStyle(fontSize: 16),
                                           ),
-                                          onPressed: () {
-                                            newQuiz();
+                                          onPressed: () async {
+                                            await newQuiz();
                                           },
                                           child: Text(
                                             "Play a new quiz".toUpperCase(),

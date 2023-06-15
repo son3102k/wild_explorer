@@ -33,6 +33,7 @@ class _ChallengeBannerViewState extends State<ChallengeBannerView> {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.5,
               decoration: BoxDecoration(
+                color: Colors.black54,
                 image: DecorationImage(
                     colorFilter: ColorFilter.mode(
                       Colors.black.withOpacity(0.3),

@@ -1,6 +1,6 @@
 class ApiConstants {
-  // static String baseUrl = 'https://wx-app-service.onrender.com/';
-  static String baseUrl = 'http://172.16.1.80:8081/';
+  static String baseUrl = 'https://wx-app-service.onrender.com/';
+  // static String baseUrl = 'http://172.16.1.80:8081/';
   static String getPopularAnimalEntityUrl =
       'get/entity-top-n?tag_id=1&number=10';
   static String getPopularPlantEntityUrl =

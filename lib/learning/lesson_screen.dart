@@ -19,6 +19,7 @@ class _LessonScreenState extends State<LessonScreen> {
   Future<bool> fetchData() async {
     detail ??= await ApiService().getLessonDetail(widget.lessonId);
     setState(() {});
+    await Future.delayed(Duration(milliseconds: 500));
     return true;
   }
 
@@ -40,15 +41,18 @@ class _LessonScreenState extends State<LessonScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: SizedBox(
-          child: FutureBuilder(
-            future: fetchData(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Container();
-              } else {
-                return Column(
+      body: FutureBuilder(
+        future: fetchData(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Align(
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return SingleChildScrollView(
+              child: SizedBox(
+                child: Column(
                   children: [
                     getUITopBar(),
                     Container(
@@ -87,11 +91,11 @@ class _LessonScreenState extends State<LessonScreen> {
                       ]),
                     ),
                   ],
-                );
-              }
-            },
-          ),
-        ),
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }

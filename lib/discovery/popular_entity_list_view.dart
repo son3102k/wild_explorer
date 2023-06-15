@@ -3,15 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:wild_explorer/discovery/discovery_home_screen.dart';
 import 'package:wild_explorer/discovery/models/entity.dart';
 import 'package:wild_explorer/discovery/utils/HexColor.dart';
+import 'package:wild_explorer/helpers/skeleton/NewsCardSkelton.dart';
+import 'package:wild_explorer/helpers/skeleton/constants.dart';
 import 'package:wild_explorer/services/api/api_service.dart';
 
 import 'discovery_app_theme.dart';
 
 class PopularEntityListView extends StatefulWidget {
   final CategoryType categoryType;
-  const PopularEntityListView(
-      {Key? key, this.callBack, required this.categoryType})
-      : super(key: key);
+  const PopularEntityListView({
+    Key? key,
+    this.callBack,
+    required this.categoryType,
+  }) : super(key: key);
 
   final Function(Entity entity)? callBack;
   @override
@@ -30,16 +34,16 @@ class _PopularEntityListViewState extends State<PopularEntityListView>
   }
 
   Future<bool> getData() async {
+    if (popularAnimalList.isEmpty) {
+      popularAnimalList = await (ApiService().getPopular(widget.categoryType));
+    }
+
+    if (popularPlantList.isEmpty) {
+      popularPlantList = await (ApiService().getPopular(widget.categoryType));
+    }
     if (widget.categoryType == CategoryType.animal) {
-      if (popularAnimalList.isEmpty) {
-        popularAnimalList =
-            await (ApiService().getPopular(widget.categoryType));
-      }
       popularEntityList = popularAnimalList;
     } else if (widget.categoryType == CategoryType.plant) {
-      if (popularPlantList.isEmpty) {
-        popularPlantList = await (ApiService().getPopular(widget.categoryType));
-      }
       popularEntityList = popularPlantList;
     }
     return true;
@@ -53,7 +57,12 @@ class _PopularEntityListViewState extends State<PopularEntityListView>
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (!snapshot.hasData) {
-            return const SizedBox();
+            return ListView.separated(
+              itemCount: 5,
+              itemBuilder: (context, index) => const NewsCardSkelton(),
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: defaultPadding),
+            );
           } else {
             return GridView(
               padding: const EdgeInsets.all(8),

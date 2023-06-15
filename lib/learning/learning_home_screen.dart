@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wild_explorer/helpers/skeleton/NewsCardSkelton.dart';
+import 'package:wild_explorer/helpers/skeleton/constants.dart';
 import 'package:wild_explorer/learning/home_list_view.dart';
 import 'package:wild_explorer/learning/lesson_screen.dart';
 import 'package:wild_explorer/learning/model/list_data.dart';
@@ -121,7 +123,15 @@ class _LearningHomeScreenState extends State<LearnHomeScreen>
               future: getData(),
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                 if (!snapshot.hasData) {
-                  return const SizedBox();
+                  return Padding(
+                    padding: EdgeInsets.all(16),
+                    child: ListView.separated(
+                      itemCount: 4,
+                      itemBuilder: (context, index) => const NewsCardSkelton(),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: defaultPadding),
+                    ),
+                  );
                 } else {
                   return ListView.builder(
                     itemCount: learningList.length,
@@ -174,32 +184,6 @@ class _LearningHomeScreenState extends State<LearnHomeScreen>
           )
         ],
       ),
-    );
-  }
-
-  Widget getHotelViewList() {
-    final List<Widget> hotelListViews = <Widget>[];
-    for (int i = 0; i < learningList.length; i++) {
-      final int count = learningList.length;
-      final Animation<double> animation =
-          Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: animationController!,
-          curve: Interval((1 / count) * i, 1.0, curve: Curves.fastOutSlowIn),
-        ),
-      );
-      hotelListViews.add(
-        HomeListView(
-          callback: () {},
-          listData: learningList[i],
-          animation: animation,
-          animationController: animationController!,
-        ),
-      );
-    }
-    animationController?.forward();
-    return Column(
-      children: hotelListViews,
     );
   }
 
