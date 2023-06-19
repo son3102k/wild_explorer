@@ -8,6 +8,7 @@ import 'package:wild_explorer/invite_friend_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/model/app-user-info.dart';
 import 'package:wild_explorer/services/api/api_service.dart';
+import 'package:wild_explorer/setting_screen.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   @override
@@ -30,7 +31,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   @override
   void initState() {
     drawerIndex = DrawerIndex.HOME;
-    screenView = const MyHomePage();
+    screenView = const HomeScreen();
     fetchData();
     super.initState();
   }
@@ -66,7 +67,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       switch (drawerIndex) {
         case DrawerIndex.HOME:
           setState(() {
-            screenView = const MyHomePage();
+            screenView = const HomeScreen();
           });
           break;
         case DrawerIndex.Help:
@@ -82,6 +83,11 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         case DrawerIndex.Invite:
           setState(() {
             screenView = InviteFriend();
+          });
+          break;
+        case DrawerIndex.Settings:
+          setState(() {
+            screenView = SettingScreen(userInfo: userInfo);
           });
           break;
         default:
