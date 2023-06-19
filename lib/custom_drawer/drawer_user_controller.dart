@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wild_explorer/model/app-user-info.dart';
 
 import '../app_theme.dart';
 import 'home_drawer.dart';
@@ -13,6 +14,7 @@ class DrawerUserController extends StatefulWidget {
     this.menuView,
     this.drawerIsOpen,
     this.screenIndex,
+    this.userInfo,
   }) : super(key: key);
 
   final double drawerWidth;
@@ -22,6 +24,7 @@ class DrawerUserController extends StatefulWidget {
   final AnimatedIconData? animatedIconData;
   final Widget? menuView;
   final DrawerIndex? screenIndex;
+  final AppUserInfo? userInfo;
 
   @override
   _DrawerUserControllerState createState() => _DrawerUserControllerState();
@@ -120,6 +123,7 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                       transform: Matrix4.translationValues(
                           scrollController!.offset, 0.0, 0.0),
                       child: HomeDrawer(
+                        userInfo: widget.userInfo,
                         screenIndex: widget.screenIndex == null
                             ? DrawerIndex.HOME
                             : widget.screenIndex,

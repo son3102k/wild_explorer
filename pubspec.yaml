@@ -83,10 +83,10 @@ flutter:
   # assets:
   assets:
         - assets/images/
-        - assets/design_course/
+        - assets/discovery/
         - assets/detection/
-        - assets/hotel/
-        - assets/introduction_animation/
+        - assets/learning/
+        - assets/chatopenai/
         - assets/icons/
         - assets/model_ai/mobilenetv2.ptl
 

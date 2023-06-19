@@ -13,8 +13,71 @@ import 'package:http/http.dart' as http;
 import 'package:wild_explorer/learning/model/lesson_detail.dart';
 import 'package:wild_explorer/learning/model/list_data.dart';
 import 'package:wild_explorer/learning/model/question.dart';
+import 'package:wild_explorer/model/app-user-info.dart';
+import 'package:wild_explorer/services/auth/auth_user.dart';
 
 class ApiService {
+  Future<AppUserInfo> getUserInfo() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? idToken = prefs.getString('idToken');
+      final Uri url =
+          Uri.parse(ApiConstants.baseUrl + ApiConstants.getUserInfo);
+      var response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer $idToken',
+        },
+      );
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        int code = result["code"];
+        if (code == 0) {
+          return AppUserInfo.fromJson(result["data"]);
+        }
+      }
+      return AppUserInfo(
+        email: "",
+        avatarLink: "",
+        phoneNumber: "",
+        name: "",
+      );
+    } catch (_) {
+      return AppUserInfo(
+        email: "",
+        avatarLink: "",
+        phoneNumber: "",
+        name: "",
+      );
+    }
+  }
+
+  Future<bool> register(AuthUser? authUser) async {
+    if (authUser == null) {
+      return false;
+    }
+    final Uri url = Uri.parse(ApiConstants.baseUrl + ApiConstants.register);
+    var response = await http.post(url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
+        },
+        body: jsonEncode({
+          'id': authUser.id,
+          'email': authUser.email,
+        }));
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      int code = result["code"];
+      if (code == 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   Future<LessonDetail> getLessonDetail(int id) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();

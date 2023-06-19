@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:wild_explorer/services/api/api_service.dart';
 
 import '../auth_provider.dart';
 import 'auth_event.dart';
@@ -57,6 +58,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<AuthEventRegister>((event, emit) async {
+      emit(const AuthStateRegistering(
+        isLoading: true,
+        exception: null,
+      ));
       final email = event.email;
       final password = event.password;
       try {
@@ -64,8 +69,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           email: email,
           password: password,
         );
-        await provider.sendEmailVerification();
-        emit(const AuthStateNeedsVerification(isLoading: false));
+        final user = provider.currentUser;
+        bool isRegistered = await ApiService().register(user);
+        if (isRegistered) {
+          await provider.sendEmailVerification();
+          emit(const AuthStateNeedsVerification(isLoading: false));
+        } else {
+          emit(const AuthStateRegistering(
+            exception: null,
+            isLoading: false,
+          ));
+        }
       } on Exception catch (e) {
         emit(AuthStateRegistering(
           exception: e,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wild_explorer/model/app-user-info.dart';
 
 import '../app_theme.dart';
 import '../services/auth/bloc/auth_bloc.dart';
@@ -7,16 +8,18 @@ import '../services/auth/bloc/auth_event.dart';
 import '../view/ultilities/dialogs/logout_dialog.dart';
 
 class HomeDrawer extends StatefulWidget {
-  const HomeDrawer(
-      {Key? key,
-      this.screenIndex,
-      this.iconAnimationController,
-      this.callBackIndex})
-      : super(key: key);
+  const HomeDrawer({
+    Key? key,
+    this.screenIndex,
+    this.iconAnimationController,
+    this.callBackIndex,
+    this.userInfo,
+  }) : super(key: key);
 
   final AnimationController? iconAnimationController;
   final DrawerIndex? screenIndex;
   final Function(DrawerIndex)? callBackIndex;
+  final AppUserInfo? userInfo;
 
   @override
   _HomeDrawerState createState() => _HomeDrawerState();
@@ -124,7 +127,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8, left: 4),
                     child: Text(
-                      'Chris Hemsworth',
+                      widget.userInfo?.name ?? "",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: isLightMode ? AppTheme.grey : AppTheme.white,

@@ -15,18 +15,18 @@ class HomeList {
 
   static List<HomeList> homeList = [
     HomeList(
-      imagePath: 'assets/introduction_animation/introduction_animation.png',
+      imagePath: 'assets/chatopenai/open-ai-chatgpt.jpg',
       navigateScreen: const ChatAIScreen(),
     ),
     HomeList(
-        imagePath: 'assets/hotel/hotel_booking.png',
+        imagePath: 'assets/learning/learning.jpg',
         navigateScreen: LearnHomeScreen()),
     HomeList(
-      imagePath: 'assets/detection/fitness_app.png',
+      imagePath: 'assets/detection/detection.png',
       navigateScreen: const DetectionHomeScreen(),
     ),
     HomeList(
-        imagePath: 'assets/design_course/design_course.png',
+        imagePath: 'assets/discovery/discovery.jpg',
         navigateScreen: const DiscoveryHomeScreen()),
   ];
 }

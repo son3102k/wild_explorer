@@ -6,6 +6,8 @@ import 'package:wild_explorer/help_screen.dart';
 import 'package:wild_explorer/home_screen.dart';
 import 'package:wild_explorer/invite_friend_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:wild_explorer/model/app-user-info.dart';
+import 'package:wild_explorer/services/api/api_service.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   @override
@@ -16,10 +18,20 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   Widget? screenView;
   DrawerIndex? drawerIndex;
 
+  AppUserInfo? userInfo;
+
+  Future<void> fetchData() async {
+    final res = await ApiService().getUserInfo();
+    setState(() {
+      userInfo = res;
+    });
+  }
+
   @override
   void initState() {
     drawerIndex = DrawerIndex.HOME;
     screenView = const MyHomePage();
+    fetchData();
     super.initState();
   }
 
@@ -33,6 +45,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         child: Scaffold(
           backgroundColor: AppTheme.nearlyWhite,
           body: DrawerUserController(
+            userInfo: userInfo,
             screenIndex: drawerIndex,
             drawerWidth: MediaQuery.of(context).size.width * 0.75,
             onDrawerCall: (DrawerIndex drawerIndexdata) {
