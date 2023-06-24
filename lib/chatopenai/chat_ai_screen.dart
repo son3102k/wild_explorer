@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:wild_explorer/chatopenai/chat_widget.dart';
-import 'package:wild_explorer/chatopenai/const/const.dart';
 import 'package:wild_explorer/chatopenai/models/chat_model.dart';
 import 'package:wild_explorer/services/api/api_service.dart';
 import 'package:wild_explorer/services/openai/chat_service.dart';
@@ -50,11 +49,12 @@ class _ChatAIScreenState extends State<ChatAIScreen> {
         elevation: 2,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Image.asset(ChatImages.openaiLogo)),
+          child: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ),
         backgroundColor: const Color(0xFF444654),
         title: const Text(
@@ -83,6 +83,9 @@ class _ChatAIScreenState extends State<ChatAIScreen> {
                       return ChatWidget(
                         msg: chatList[index].msg,
                         chatIndex: chatList[index].chatIndex,
+                        scrollToEnd: () {
+                          scrollListToEnd();
+                        },
                       );
                     })),
             if (_isTyping) ...[

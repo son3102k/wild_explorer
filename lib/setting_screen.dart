@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/app_theme.dart';
 import 'package:wild_explorer/extensions/buildcontext/loc.dart';

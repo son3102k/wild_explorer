@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:wild_explorer/chatopenai/const/const.dart';
 
 class ChatWidget extends StatelessWidget {
-  const ChatWidget({super.key, required this.msg, required this.chatIndex});
-
+  const ChatWidget(
+      {super.key,
+      required this.msg,
+      required this.chatIndex,
+      this.scrollToEnd});
+  final VoidCallback? scrollToEnd;
   final String msg;
   final int chatIndex;
 
@@ -55,6 +59,9 @@ class ChatWidget extends StatelessWidget {
                             displayFullTextOnTap: true,
                             totalRepeatCount: 1,
                             animatedTexts: [TypewriterAnimatedText(msg.trim())],
+                            onFinished: () {
+                              scrollToEnd?.call();
+                            },
                           ),
                         ),
                 ),

@@ -8,6 +8,7 @@ import 'package:wild_explorer/discovery/entity_info_screen.dart';
 import 'package:wild_explorer/discovery/models/entity.dart';
 import 'package:wild_explorer/engine/image_classification.dart';
 import 'package:wild_explorer/main.dart';
+import 'package:wild_explorer/model/question_generate_chat_openai.dart';
 import 'package:wild_explorer/services/api/api_service.dart';
 
 class DetectedScreen extends StatefulWidget {
@@ -32,8 +33,8 @@ class _DetectedScreenState extends State<DetectedScreen> {
     );
     log(output.toString());
     if (output.values.first > 0.2) {
-      final specieName = output.keys.first;
-      detectedEntity = await ApiService().getEntityBy(specieName);
+      final name = output.keys.first;
+      detectedEntity = await ApiService().getEntityBy(name);
     }
     return true;
   }
@@ -71,7 +72,9 @@ class _DetectedScreenState extends State<DetectedScreen> {
           future: fetchData(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return SizedBox();
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             } else {
               return Column(
                 children: [
@@ -115,60 +118,94 @@ class _DetectedScreenState extends State<DetectedScreen> {
                   const SizedBox(
                     height: 50,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(50),
-                    child: Column(
-                      children: [
-                        Text(
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(50),
+                      child: Column(
+                        children: [
+                          Text(
+                            detectedEntity != null
+                                ? "We belive this is a".toUpperCase()
+                                : "We couldn't identify the exact species"
+                                    .toUpperCase(),
+                            style: DetectionTheme.h1_darkBlue,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           detectedEntity != null
-                              ? "We belive this is a".toUpperCase()
-                              : "We couldn't identify the exact species"
-                                  .toUpperCase(),
-                          style: DetectionTheme.h1_darkBlue,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        detectedEntity != null
-                            ? Text(
-                                detectedEntity!.name.toUpperCase(),
-                                style: const TextStyle(
-                                  fontFamily: 'Rubik',
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
+                              ? Text(
+                                  detectedEntity!.name.toUpperCase(),
+                                  style: const TextStyle(
+                                    fontFamily: 'Rubik',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                )
+                              : const SizedBox(),
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(bottom: 50),
+                            height: 50,
+                            width: double.infinity,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
-                              )
-                            : const SizedBox(),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        Container(
-                          height: 50,
-                          width: double.infinity,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
+                                foregroundColor: Colors.white,
+                                backgroundColor: DetectionTheme.nearlyDarkBlue,
+                                textStyle: const TextStyle(fontSize: 16),
                               ),
-                              foregroundColor: Colors.white,
-                              backgroundColor: DetectionTheme.nearlyDarkBlue,
-                              textStyle: const TextStyle(fontSize: 16),
-                            ),
-                            onPressed: () {
-                              moveTo();
-                            },
-                            child: Text(
-                              detectedEntity != null
-                                  ? "view detail".toUpperCase()
-                                  : "take another photo".toUpperCase(),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+                              onPressed: () {
+                                moveTo();
+                              },
+                              child: Text(
+                                detectedEntity != null
+                                    ? "view detail".toUpperCase()
+                                    : "take another photo".toUpperCase(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                          Expanded(child: SizedBox()),
+                          SizedBox(
+                            height: 150,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: detectedEntity != null
+                                  ? [
+                                      Text(
+                                        QuestionGenerateChatOpenai.generate(
+                                          detectedEntity!.specie,
+                                          detectedEntity!.name,
+                                        ),
+                                        style: DetectionTheme.h2_darkBlue,
+                                      ),
+                                      Text(
+                                        QuestionGenerateChatOpenai.generate(
+                                            detectedEntity!.specie,
+                                            detectedEntity!.name),
+                                        style: DetectionTheme.h2_darkBlue,
+                                      ),
+                                      Text(
+                                        QuestionGenerateChatOpenai.generate(
+                                            detectedEntity!.specie,
+                                            detectedEntity!.name),
+                                        style: DetectionTheme.h2_darkBlue,
+                                      ),
+                                    ]
+                                  : [],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ],

@@ -144,12 +144,12 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                const Text(
-                                  '\$28.99',
+                                Text(
+                                  entity.specie,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w200,
-                                    fontSize: 22,
+                                    fontSize: 16,
                                     letterSpacing: 0.27,
                                     color: DiscoveryAppTheme.nearlyBlue,
                                   ),
@@ -234,37 +234,40 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                               ),
                             ),
                           ),
-                          AnimatedOpacity(
-                            duration: const Duration(milliseconds: 500),
-                            opacity: opacity1,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Row(
-                                children: <Widget>[
-                                  getTimeBoxUI('24', 'Classe'),
-                                  getTimeBoxUI('2hours', 'Time'),
-                                  getTimeBoxUI('24', 'Seat'),
-                                ],
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: AnimatedOpacity(
+                              duration: const Duration(milliseconds: 500),
+                              opacity: opacity1,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Row(
+                                  children: <Widget>[
+                                    getTimeBoxUI('60–85 cm', 'Length'),
+                                    getTimeBoxUI(' 4–15 kg', 'Weight'),
+                                    getTimeBoxUI('~ 100.000', 'Individuals'),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                           Expanded(
-                            child: AnimatedOpacity(
-                              duration: const Duration(milliseconds: 500),
-                              opacity: opacity2,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 16, right: 16, top: 8, bottom: 8),
-                                child: Text(
-                                  entity.description,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w200,
-                                    fontSize: 14,
-                                    letterSpacing: 0.85,
-                                    color: DiscoveryAppTheme.grey,
+                            child: SingleChildScrollView(
+                              child: AnimatedOpacity(
+                                duration: const Duration(milliseconds: 500),
+                                opacity: opacity2,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 16, right: 16, top: 8, bottom: 8),
+                                  child: Text(
+                                    entity.description,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w200,
+                                      fontSize: 14,
+                                      letterSpacing: 0.85,
+                                      color: DiscoveryAppTheme.grey,
+                                    ),
                                   ),
-                                  maxLines: 10,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ),
@@ -279,29 +282,6 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Container(
-                                    width: 48,
-                                    height: 48,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: DiscoveryAppTheme.nearlyWhite,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(16.0),
-                                        ),
-                                        border: Border.all(
-                                            color: DiscoveryAppTheme.grey
-                                                .withOpacity(0.2)),
-                                      ),
-                                      child: const Icon(
-                                        Icons.add,
-                                        color: DiscoveryAppTheme.nearlyBlue,
-                                        size: 28,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 16,
-                                  ),
                                   Expanded(
                                     child: Container(
                                       height: 48,
@@ -321,7 +301,7 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                                       ),
                                       child: const Center(
                                         child: Text(
-                                          'Join Course',
+                                          'Ask GPT',
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,

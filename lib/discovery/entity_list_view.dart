@@ -31,10 +31,10 @@ class _EntityListViewState extends State<EntityListView>
 
   Future<bool> getData() async {
     if (animalList.isEmpty) {
-      animalList = await (ApiService().getRandomFive(widget.categoryType));
+      animalList = await (ApiService().getRandomFive(CategoryType.animal));
     }
     if (plantList.isEmpty) {
-      plantList = await (ApiService().getRandomFive(widget.categoryType));
+      plantList = await (ApiService().getRandomFive(CategoryType.plant));
     }
     if (widget.categoryType == CategoryType.animal) {
       entityList = animalList;
@@ -136,8 +136,8 @@ class CategoryView extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const Expanded(
-                                child: SizedBox(),
+                              SizedBox(
+                                height: 16,
                               ),
                               Padding(
                                 padding:
@@ -157,62 +157,27 @@ class CategoryView extends StatelessWidget {
                                         color: DiscoveryAppTheme.grey,
                                       ),
                                     ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text(
-                                          '${category!.rating}',
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w200,
-                                            fontSize: 18,
-                                            letterSpacing: 0.27,
-                                            color: DiscoveryAppTheme.grey,
-                                          ),
-                                        ),
-                                        const Icon(
-                                          Icons.star,
-                                          color: DiscoveryAppTheme.nearlyBlue,
-                                          size: 20,
-                                        ),
-                                      ],
-                                    )
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 16, right: 16),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      '\$${category!.rating}',
-                                      textAlign: TextAlign.left,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18,
-                                        letterSpacing: 0.27,
-                                        color: DiscoveryAppTheme.nearlyBlue,
-                                      ),
+                              Row(
+                                children: <Widget>[
+                                  Text(
+                                    '${category!.rating}',
+                                    textAlign: TextAlign.left,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w200,
+                                      fontSize: 18,
+                                      letterSpacing: 0.27,
+                                      color: DiscoveryAppTheme.grey,
                                     ),
-                                    Container(
-                                      decoration: const BoxDecoration(
-                                        color: DiscoveryAppTheme.nearlyBlue,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8.0)),
-                                      ),
-                                      child: const Padding(
-                                        padding: EdgeInsets.all(4.0),
-                                        child: Icon(
-                                          Icons.add,
-                                          color: DiscoveryAppTheme.nearlyWhite,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                  ),
+                                  const Icon(
+                                    Icons.star,
+                                    color: DiscoveryAppTheme.nearlyBlue,
+                                    size: 20,
+                                  ),
+                                ],
                               ),
                             ],
                           ),

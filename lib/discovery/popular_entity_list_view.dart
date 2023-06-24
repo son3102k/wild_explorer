@@ -35,11 +35,11 @@ class _PopularEntityListViewState extends State<PopularEntityListView>
 
   Future<bool> getData() async {
     if (popularAnimalList.isEmpty) {
-      popularAnimalList = await (ApiService().getPopular(widget.categoryType));
+      popularAnimalList = await (ApiService().getPopular(CategoryType.animal));
     }
 
     if (popularPlantList.isEmpty) {
-      popularPlantList = await (ApiService().getPopular(widget.categoryType));
+      popularPlantList = await (ApiService().getPopular(CategoryType.plant));
     }
     if (widget.categoryType == CategoryType.animal) {
       popularEntityList = popularAnimalList;
