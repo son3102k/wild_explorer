@@ -10,7 +10,9 @@ import 'package:wild_explorer/services/openai/chat_service.dart';
 import 'package:wild_explorer/services/openai/openai_model_provider.dart';
 
 class ChatAIScreen extends StatefulWidget {
-  const ChatAIScreen({super.key});
+  const ChatAIScreen({super.key, this.initText});
+
+  final String? initText;
 
   @override
   State<ChatAIScreen> createState() => _ChatAIScreenState();
@@ -30,6 +32,9 @@ class _ChatAIScreenState extends State<ChatAIScreen> {
     scrollController = ScrollController();
     controller = TextEditingController();
     focusNode = FocusNode();
+    if (widget.initText != null) {
+      controller.text = widget.initText!;
+    }
     super.initState();
   }
 

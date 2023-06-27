@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/detection/detection_theme.dart';
 import 'package:wild_explorer/detection/ui_view/challenge_banner_view.dart';
@@ -43,10 +42,8 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
                       Colors.black.withOpacity(0.3),
                       BlendMode.srcATop,
                     ),
-                    image: const CachedNetworkImageProvider(
-                      'https://upload.wikimedia.org/wikipedia/commons/f/ff/%E4%B9%9D%E5%AF%A8%E6%BA%9D-%E4%BA%94%E8%8A%B1%E6%B5%B7.jpg',
-                      cacheKey:
-                          'https://upload.wikimedia.org/wikipedia/commons/f/ff/%E4%B9%9D%E5%AF%A8%E6%BA%9D-%E4%BA%94%E8%8A%B1%E6%B5%B7.jpg',
+                    image: AssetImage(
+                      'assets/images/challenge_banner_background.jpg',
                     ),
                     fit: BoxFit.fill),
               ),

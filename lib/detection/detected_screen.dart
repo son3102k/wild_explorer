@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:wild_explorer/chatopenai/chat_ai_screen.dart';
 import 'package:wild_explorer/detection/detection_theme.dart';
 import 'package:wild_explorer/discovery/entity_info_screen.dart';
 import 'package:wild_explorer/discovery/models/entity.dart';
@@ -21,6 +22,15 @@ class DetectedScreen extends StatefulWidget {
 
 class _DetectedScreenState extends State<DetectedScreen> {
   Entity? detectedEntity;
+
+  void moveToChatScreen(String? question) {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => ChatAIScreen(initText: question),
+      ),
+    );
+  }
 
   Future<bool> fetchData() async {
     final bytesData = await widget.image.readAsBytes();
@@ -61,6 +71,23 @@ class _DetectedScreenState extends State<DetectedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String q1 = "";
+    String q2 = "";
+    String q3 = "";
+    if (detectedEntity != null) {
+      q1 = QuestionGenerateChatOpenai.generate(
+        detectedEntity!.specie,
+        detectedEntity!.name,
+      );
+      q2 = QuestionGenerateChatOpenai.generate(
+        detectedEntity!.specie,
+        detectedEntity!.name,
+      );
+      q3 = QuestionGenerateChatOpenai.generate(
+        detectedEntity!.specie,
+        detectedEntity!.name,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text(''),
@@ -181,24 +208,32 @@ class _DetectedScreenState extends State<DetectedScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: detectedEntity != null
                                   ? [
-                                      Text(
-                                        QuestionGenerateChatOpenai.generate(
-                                          detectedEntity!.specie,
-                                          detectedEntity!.name,
+                                      InkWell(
+                                        onTap: () {
+                                          moveToChatScreen(q1);
+                                        },
+                                        child: Text(
+                                          q1,
+                                          style: DetectionTheme.h2_darkBlue,
                                         ),
-                                        style: DetectionTheme.h2_darkBlue,
                                       ),
-                                      Text(
-                                        QuestionGenerateChatOpenai.generate(
-                                            detectedEntity!.specie,
-                                            detectedEntity!.name),
-                                        style: DetectionTheme.h2_darkBlue,
+                                      InkWell(
+                                        onTap: () {
+                                          moveToChatScreen(q2);
+                                        },
+                                        child: Text(
+                                          q2,
+                                          style: DetectionTheme.h2_darkBlue,
+                                        ),
                                       ),
-                                      Text(
-                                        QuestionGenerateChatOpenai.generate(
-                                            detectedEntity!.specie,
-                                            detectedEntity!.name),
-                                        style: DetectionTheme.h2_darkBlue,
+                                      InkWell(
+                                        onTap: () {
+                                          moveToChatScreen(q3);
+                                        },
+                                        child: Text(
+                                          q3,
+                                          style: DetectionTheme.h2_darkBlue,
+                                        ),
                                       ),
                                     ]
                                   : [],
