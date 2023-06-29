@@ -17,6 +17,39 @@ import 'package:wild_explorer/model/app-user-info.dart';
 import 'package:wild_explorer/services/auth/auth_user.dart';
 
 class ApiService {
+  Future<bool> setAppUserInfo(
+      String name, String phoneNumber, String imageData) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? idToken = prefs.getString('idToken');
+      final Uri url =
+          Uri.parse(ApiConstants.baseUrl + ApiConstants.setUserInfo);
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer $idToken',
+        },
+        body: jsonEncode({
+          'name': name,
+          'phoneNumber': phoneNumber,
+          'imageData': imageData,
+        }),
+      );
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        int code = result["code"];
+        if (code == 0) {
+          return true;
+        }
+      }
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   Future<AppUserInfo> getUserInfo() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();

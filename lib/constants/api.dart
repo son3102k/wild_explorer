@@ -15,4 +15,5 @@ class ApiConstants {
   static String getLessonDetail = 'lesson/get?id=';
   static String register = 'auth/register';
   static String getUserInfo = 'get/user-info';
+  static String setUserInfo = 'user/set';
 }

@@ -23,6 +23,10 @@ class DetectedScreen extends StatefulWidget {
 class _DetectedScreenState extends State<DetectedScreen> {
   Entity? detectedEntity;
 
+  String q1 = "";
+  String q2 = "";
+  String q3 = "";
+
   void moveToChatScreen(String? question) {
     Navigator.push<dynamic>(
       context,
@@ -33,18 +37,37 @@ class _DetectedScreenState extends State<DetectedScreen> {
   }
 
   Future<bool> fetchData() async {
-    final bytesData = await widget.image.readAsBytes();
-    final imageData = bytesData.buffer.asByteData();
-    final output = await ImageClassification.getOutputDict(
-      modelPath,
-      imageData.buffer
-          .asUint8List(imageData.offsetInBytes, imageData.lengthInBytes),
-      imageData.lengthInBytes,
-    );
-    log(output.toString());
-    if (output.values.first > 0.2) {
-      final name = output.keys.first;
-      detectedEntity = await ApiService().getEntityBy(name);
+    if (detectedEntity == null) {
+      final bytesData = await widget.image.readAsBytes();
+      final imageData = bytesData.buffer.asByteData();
+      final output = await ImageClassification.getOutputDict(
+        modelPath,
+        imageData.buffer
+            .asUint8List(imageData.offsetInBytes, imageData.lengthInBytes),
+        imageData.lengthInBytes,
+      );
+      log(output.toString());
+      if (output.values.first > 0.2) {
+        final name = output.keys.first;
+        detectedEntity = await ApiService().getEntityBy(name);
+      }
+
+      if (detectedEntity != null) {
+        setState(() {
+          q1 = QuestionGenerateChatOpenai.generate(
+            detectedEntity!.specie,
+            detectedEntity!.name,
+          );
+          q2 = QuestionGenerateChatOpenai.generate(
+            detectedEntity!.specie,
+            detectedEntity!.name,
+          );
+          q3 = QuestionGenerateChatOpenai.generate(
+            detectedEntity!.specie,
+            detectedEntity!.name,
+          );
+        });
+      }
     }
     return true;
   }
@@ -71,23 +94,6 @@ class _DetectedScreenState extends State<DetectedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String q1 = "";
-    String q2 = "";
-    String q3 = "";
-    if (detectedEntity != null) {
-      q1 = QuestionGenerateChatOpenai.generate(
-        detectedEntity!.specie,
-        detectedEntity!.name,
-      );
-      q2 = QuestionGenerateChatOpenai.generate(
-        detectedEntity!.specie,
-        detectedEntity!.name,
-      );
-      q3 = QuestionGenerateChatOpenai.generate(
-        detectedEntity!.specie,
-        detectedEntity!.name,
-      );
-    }
     return Scaffold(
       appBar: AppBar(
         title: const Text(''),

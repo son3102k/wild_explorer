@@ -87,7 +87,12 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           break;
         case DrawerIndex.Settings:
           setState(() {
-            screenView = SettingScreen(userInfo: userInfo);
+            screenView = SettingScreen(
+              userInfo: userInfo,
+              setAppUserInfo: () async {
+                await fetchData();
+              },
+            );
           });
           break;
         default:
