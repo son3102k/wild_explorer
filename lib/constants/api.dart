@@ -16,4 +16,5 @@ class ApiConstants {
   static String register = 'auth/register';
   static String getUserInfo = 'get/user-info';
   static String setUserInfo = 'user/set';
+  static String getRelatedEntity = 'get/related-entity?specie_name=';
 }

@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wild_explorer/discovery/models/entity.dart';
+import 'package:wild_explorer/services/api/api_service.dart';
 import 'discovery_app_theme.dart';
 
 class EntityInfoScreen extends StatefulWidget {
@@ -37,6 +40,16 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  void moveTo(Entity entity) {
+    Navigator.of(context).pop();
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => EntityInfoScreen(entity: entity),
+      ),
+    );
   }
 
   Future<void> setData() async {
@@ -283,37 +296,75 @@ class _EntityInfoScreenState extends State<EntityInfoScreen>
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Expanded(
-                                    child: Container(
-                                      height: 48,
-                                      decoration: BoxDecoration(
-                                        color: DiscoveryAppTheme.nearlyBlue,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(16.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        log("press ask gpt");
+                                      },
+                                      child: Container(
+                                        height: 48,
+                                        decoration: BoxDecoration(
+                                          color: DiscoveryAppTheme.nearlyBlue,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(16.0),
+                                          ),
+                                          boxShadow: <BoxShadow>[
+                                            BoxShadow(
+                                                color: DiscoveryAppTheme
+                                                    .nearlyBlue
+                                                    .withOpacity(0.5),
+                                                offset: const Offset(1.1, 1.1),
+                                                blurRadius: 10.0),
+                                          ],
                                         ),
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(
-                                              color: DiscoveryAppTheme
-                                                  .nearlyBlue
-                                                  .withOpacity(0.5),
-                                              offset: const Offset(1.1, 1.1),
-                                              blurRadius: 10.0),
-                                        ],
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'Ask GPT',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18,
-                                            letterSpacing: 0.0,
-                                            color:
-                                                DiscoveryAppTheme.nearlyWhite,
+                                        child: const Center(
+                                          child: Text(
+                                            'Ask GPT',
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18,
+                                              letterSpacing: 0.0,
+                                              color:
+                                                  DiscoveryAppTheme.nearlyWhite,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  )
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  InkWell(
+                                    onTap: () async {
+                                      Entity? relatedEntity = await ApiService()
+                                          .getRelatedEntity(entity.specie);
+                                      if (relatedEntity != null) {
+                                        moveTo(relatedEntity);
+                                      }
+                                    },
+                                    child: Container(
+                                      width: 48,
+                                      height: 48,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: DiscoveryAppTheme.nearlyBlue,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(16.0),
+                                          ),
+                                          border: Border.all(
+                                              color: DiscoveryAppTheme
+                                                  .nearlyBlue
+                                                  .withOpacity(0.2)),
+                                        ),
+                                        child: Icon(
+                                          Icons.navigate_next,
+                                          color: DiscoveryAppTheme.nearlyWhite,
+                                          size: 28,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

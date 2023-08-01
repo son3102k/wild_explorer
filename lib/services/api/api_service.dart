@@ -17,6 +17,34 @@ import 'package:wild_explorer/model/app-user-info.dart';
 import 'package:wild_explorer/services/auth/auth_user.dart';
 
 class ApiService {
+  Future<Entity?> getRelatedEntity(String specie_name) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? idToken = prefs.getString('idToken');
+      final Uri url = Uri.parse(
+          ApiConstants.baseUrl + ApiConstants.getRelatedEntity + specie_name);
+      var response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer $idToken',
+        },
+      );
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        int code = result["code"];
+        if (code == 0) {
+          dynamic data = result["data"];
+          return Entity.fromJson(data);
+        }
+      }
+    } catch (_) {
+      return null;
+    }
+    return null;
+  }
+
   Future<bool> setAppUserInfo(
       String name, String phoneNumber, String imageData) async {
     try {
