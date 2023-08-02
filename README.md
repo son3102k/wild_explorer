@@ -1,16 +1,13 @@
-# wild_explorer
+# Wild Explorer
 
-A new Flutter project.
+Yêu cầu: đã cài Flutter phiên bản tối thiểu **3.10.5**
 
-## Getting Started
+Chạy `flutter --version` để kiểm tra phiên bản
 
-This project is a starting point for a Flutter application.
+Vào thư mục gốc: `cd .\wild_explorer-master\`
 
-A few resources to get you started if this is your first Flutter project:
+Chạy lệnh `flutter pub get` để tải các thư viện cần thiết
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Chạy lệnh `flutter build apk --release` để xây dựng file apk
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Sau khi build xong vào thư mục `wild_explorer-master\build\app\outputs\flutter-apk` sẽ có file cài đặt **app-release.apk**
